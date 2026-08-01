@@ -1,1 +1,0 @@
-# metehankaraden1z.github.io
