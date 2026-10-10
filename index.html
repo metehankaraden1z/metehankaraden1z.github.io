@@ -9,9 +9,9 @@
     content="Metehan Karadeniz - Computer Science undergrad at Bilkent University, All my links in one place.">
   <meta property="og:title" content="Metehan Karadeniz">
   <meta property="og:description" content="CS student at Bilkent University. Find all my links here.">
-  <meta property="og:image" content="mario_firstphoto_in_site.jpg">
+  <meta property="og:image" content="https://metehankaraden1z.github.io/mario_firstphoto_in_site.jpg">
   <meta property="og:url" content="https://metehankaraden1z.github.io/">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -686,6 +686,10 @@
       }
     }
 
+    .sidebar a.active .blink {
+      color: var(--gold) !important;
+    }
+
     @media (max-width:760px) {
       .page-wrap {
         flex-direction: column;
@@ -700,6 +704,10 @@
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+      }
+
+      .sidebar .menu-title {
+        display: none;
       }
 
       .sidebar a {
@@ -796,7 +804,8 @@
       background-size: 100% 4px, 3px 100%;
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.6;
+      opacity: 0.3;
+      display: none;
     }
 
     .click-tag {
@@ -831,6 +840,25 @@
       display: flex;
     }
 
+    .lightbox-content {
+      background: #fff;
+      border: 2px solid #000;
+      padding: 10px 10px 30px;
+      box-shadow: 0 0 20px #000;
+      cursor: default;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lightbox-content img {
+      width: auto;
+      height: auto;
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         animation: none !important;
@@ -862,7 +890,7 @@
   <header class="hero">
     <button id="toggleCRT" class="pixel"
       style="position:absolute; top:10px; right:10px; z-index:10000; background:#000; color:var(--neon-pink); border:2px solid var(--neon-pink); font-size:10px; padding:4px; cursor:pointer;"
-      aria-label="Toggle CRT Scanlines">CRT: ON</button>
+      aria-label="Toggle CRT Scanlines">CRT: OFF</button>
     <div class="stars" aria-hidden="true">
       <span style="top:10px; left:8%; animation-delay:0s;">&#10022;</span>
       <span style="top:60px; left:88%; animation-delay:0.6s;">&#10022;</span>
@@ -887,29 +915,29 @@
   <div class="sides-container">
     <!-- LEFT SIDE FANS -->
     <aside class="side-fans side-fans-left">
-      <div class="sticker badge-stonecold card-stonecold" title="▶ CLICK ME">
-        <div class="s-photo-wrap fan-bg-stonecold">
-          <a href="https://youtu.be/YemT1Usi4MY" target="_blank" rel="noopener noreferrer" style="display:contents;"
-            aria-label="Watch Stone Cold Steve Austin video">
+      <a href="https://youtu.be/YemT1Usi4MY" target="_blank" rel="noopener noreferrer"
+        style="display:block; text-decoration:none; color:inherit;" aria-label="Watch Stone Cold Steve Austin video">
+        <div class="sticker badge-stonecold card-stonecold" title="▶ CLICK ME">
+          <div class="s-photo-wrap fan-bg-stonecold">
             <img src="stonecold.png" alt="Stone Cold Steve Austin sticker" loading="lazy" width="185" height="185"
               class="pixel-art">
-          </a>
+          </div>
+          <div class="click-tag pixel">▶ CLICK ME</div>
         </div>
-        <div class="click-tag pixel">▶ CLICK ME</div>
-      </div>
+      </a>
     </aside>
 
     <!-- RIGHT SIDE FANS -->
     <aside class="side-fans side-fans-right">
-      <div class="sticker badge-messi card-messi" title="▶ CLICK ME">
-        <div class="s-photo-wrap fan-bg-messi">
-          <a href="https://youtu.be/arP_a_PE6Js" target="_blank" rel="noopener noreferrer" style="display:contents;"
-            aria-label="Watch Lionel Messi video">
+      <a href="https://youtu.be/arP_a_PE6Js" target="_blank" rel="noopener noreferrer"
+        style="display:block; text-decoration:none; color:inherit;" aria-label="Watch Lionel Messi video">
+        <div class="sticker badge-messi card-messi" title="▶ CLICK ME">
+          <div class="s-photo-wrap fan-bg-messi">
             <img src="messi.png" alt="Lionel Messi sticker" loading="lazy" width="185" height="185" class="pixel-art">
-          </a>
+          </div>
+          <div class="click-tag pixel">▶ CLICK ME</div>
         </div>
-        <div class="click-tag pixel">▶ CLICK ME</div>
-      </div>
+      </a>
     </aside>
   </div>
 
@@ -935,15 +963,12 @@
               height="170" loading="lazy" class="pixel-art">
           </div>
           <div class="about-text">
-            <p>I'm a Computer Science student at <strong>Bilkent University</strong> in Ankara, currently working on
-              Java, Python, and C++.</p>
             <p>This site exists so people who search my name find something more interesting than a LinkedIn profile or
               a forgotten Facebook account.</p>
-            <p>I was born on 22/08/2006 and graduated from <strong>Şehit Oğuzhan Yaşar Anadolu Lisesi</strong> before
-              studying Computer Science at <strong>Bilkent University</strong>. What made me think about choosing the CS
-              department was my first experience of creating a Hamachi server in Minecraft. Outside of coding, my
-              hobbies include watching pro wrestling (mainly WWE), watching and playing football, and playing sports,
-              FPS, and story-based video games. I also love rap and mainly listen to Eminem's music.</p>
+            <p>I am 20 years old and a computer science student at <strong>Bilkent University</strong> in Ankara,
+              currently working on Java, Python, and C++.</p>
+            <p>If you want, you can look at my projects in the next section.</p>
+            <p>I would also appreciate it if you sign my guestbook in the contact section.</p>
           </div>
         </div>
       </section>
@@ -1026,7 +1051,7 @@
     <div>You are visitor number:</div>
     <div class="counter" id="counterBox"></div>
     <div> If you are reading here, why?</div>
-    <div> Version 0.34</div>
+    <div> Version 0.35</div>
     <div>&copy; 2026 Metehan Karadeniz &middot; Ankara, Türkiye &middot; Built with html and a couple packs of midnight
       blue</div>
     <div style="margin-top: 15px;">
@@ -1039,8 +1064,8 @@
 
   <!-- Lightbox Container -->
   <div id="lightbox">
-    <div class="polaroid" style="transform:none; box-shadow:0 0 20px #000; cursor:default;">
-      <img id="lightbox-img" src="" alt="lightbox image" style="max-height: 80vh; width: auto; object-fit: contain;">
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="lightbox image">
       <figcaption id="lightbox-cap" style="font-size: 24px; font-family: 'Press Start 2P', cursive; margin-top:10px;">
       </figcaption>
     </div>
@@ -1069,31 +1094,41 @@
       frame.classList.add('shaking');
     });
 
-    // localStorage visitor counter
+    // global visitor counter
     const box = document.getElementById('counterBox');
-    let visits = parseInt(localStorage.getItem('visitCount') || '10204', 10);
-    visits++;
-    localStorage.setItem('visitCount', visits);
-    const finalCount = visits;
-    const digits = String(finalCount).padStart(6, '0').split('');
-    digits.forEach(d => {
-      const span = document.createElement('span');
-      span.textContent = reduceMotion ? d : '0';
-      box.appendChild(span);
-    });
-    if (!reduceMotion) {
-      let step = 0;
-      const totalSteps = 14;
-      const timer = setInterval(() => {
-        step++;
-        const progress = Math.min(step / totalSteps, 1);
-        digits.forEach((d, i) => {
-          const val = Math.floor(parseInt(d) * progress);
-          box.children[i].textContent = step >= totalSteps ? d : val;
-        });
-        if (step >= totalSteps) clearInterval(timer);
-      }, 80);
+
+    function renderCounter(count) {
+      box.innerHTML = '';
+      const digits = String(count).padStart(6, '0').split('');
+      digits.forEach(d => {
+        const span = document.createElement('span');
+        span.textContent = reduceMotion ? d : '0';
+        box.appendChild(span);
+      });
+      if (!reduceMotion) {
+        let step = 0;
+        const totalSteps = 14;
+        const timer = setInterval(() => {
+          step++;
+          const progress = Math.min(step / totalSteps, 1);
+          digits.forEach((d, i) => {
+            const val = Math.floor(parseInt(d) * progress);
+            box.children[i].textContent = step >= totalSteps ? d : val;
+          });
+          if (step >= totalSteps) clearInterval(timer);
+        }, 80);
+      }
     }
+
+    fetch('https://abacus.jasoncameron.dev/hit/metepatladi/visits')
+      .then(response => response.json())
+      .then(data => {
+        renderCounter(10204 + data.value);
+      })
+      .catch(e => {
+        console.warn('Counter API blocked or failed, using fallback');
+        renderCounter(10205);
+      });
 
     // lightbox
     const lightbox = document.getElementById('lightbox');
@@ -1113,13 +1148,24 @@
     lightbox.addEventListener('click', () => {
       lightbox.classList.remove('active');
     });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') lightbox.classList.remove('active');
+    });
 
     // crt toggle
     const crtBtn = document.getElementById('toggleCRT');
     const scanlines = document.getElementById('scanlines');
-    let crtOn = true;
+    let crtOn = false;
+    try {
+      const storedCrt = localStorage.getItem('crtOn');
+      if (storedCrt !== null) crtOn = storedCrt === 'true';
+    } catch (e) { }
+    scanlines.style.display = crtOn ? 'block' : 'none';
+    crtBtn.textContent = crtOn ? 'CRT: ON' : 'CRT: OFF';
+
     crtBtn.addEventListener('click', () => {
       crtOn = !crtOn;
+      try { localStorage.setItem('crtOn', crtOn); } catch (e) { }
       scanlines.style.display = crtOn ? 'block' : 'none';
       crtBtn.textContent = crtOn ? 'CRT: ON' : 'CRT: OFF';
     });
