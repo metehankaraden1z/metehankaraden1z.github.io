@@ -848,9 +848,6 @@
 <body>
 
   <div class="scanlines" id="scanlines"></div>
-  <button id="toggleCRT" class="pixel"
-    style="position:fixed; top:10px; right:10px; z-index:10000; background:#000; color:var(--neon-pink); border:2px solid var(--neon-pink); font-size:10px; padding:4px; cursor:pointer;"
-    aria-label="Toggle CRT Scanlines">CRT: ON</button>
 
   <div class="marquee-bar" style="position: relative;">
     <div class="marquee-track pixel" id="marqueeTrack" style="font-family:'VT323',monospace;">
@@ -863,6 +860,9 @@
   </div>
 
   <header class="hero">
+    <button id="toggleCRT" class="pixel"
+      style="position:absolute; top:10px; right:10px; z-index:10000; background:#000; color:var(--neon-pink); border:2px solid var(--neon-pink); font-size:10px; padding:4px; cursor:pointer;"
+      aria-label="Toggle CRT Scanlines">CRT: ON</button>
     <div class="stars" aria-hidden="true">
       <span style="top:10px; left:8%; animation-delay:0s;">&#10022;</span>
       <span style="top:60px; left:88%; animation-delay:0.6s;">&#10022;</span>
@@ -1026,7 +1026,7 @@
     <div>You are visitor number:</div>
     <div class="counter" id="counterBox"></div>
     <div> If you are reading here, why?</div>
-    <div> Version 0.33</div>
+    <div> Version 0.34</div>
     <div>&copy; 2026 Metehan Karadeniz &middot; Ankara, Türkiye &middot; Built with html and a couple packs of midnight
       blue</div>
     <div style="margin-top: 15px;">
