@@ -9,6 +9,9 @@
     content="Metehan Karadeniz - Computer Science undergrad at Bilkent University, All my links in one place.">
   <meta property="og:title" content="Metehan Karadeniz">
   <meta property="og:description" content="CS student at Bilkent University. Find all my links here.">
+  <meta property="og:image" content="mario_firstphoto_in_site.jpg">
+  <meta property="og:url" content="https://metehankaraden1z.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -320,6 +323,7 @@
       box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
       padding: 26px;
       margin-bottom: 30px;
+      scroll-margin-top: 70px;
     }
 
     .panel h2 {
@@ -688,7 +692,9 @@
       }
 
       .sidebar {
-        position: static;
+        position: sticky;
+        top: 0;
+        z-index: 100;
         width: 100%;
         flex: none;
         display: flex;
@@ -699,6 +705,8 @@
       .sidebar a {
         flex: 1 1 30%;
         margin-bottom: 0;
+        font-size: 14px;
+        padding: 6px;
       }
 
       .sticker {
@@ -717,6 +725,112 @@
       }
     }
 
+    /* Cartridge Cards for Projects */
+    .project-cards {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cartridge {
+      display: flex;
+      flex-direction: column;
+      background: #888;
+      border: 4px solid #000;
+      border-radius: 8px 8px 0 0;
+      padding: 15px;
+      text-decoration: none;
+      color: #000;
+      width: 200px;
+      box-shadow: inset 0 20px 0 #555, 6px 6px 0 rgba(0, 0, 0, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .cartridge:hover {
+      transform: translateY(-4px);
+      box-shadow: inset 0 20px 0 #555, 10px 10px 0 rgba(0, 0, 0, 0.6);
+      background: #a9a9a9;
+    }
+
+    .cartridge .p-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      background: #fff;
+      padding: 5px;
+      border: 2px solid #000;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .cartridge .p-desc {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.2;
+      flex-grow: 1;
+      margin-bottom: 10px;
+      background: #ffd400;
+      padding: 5px;
+      border: 2px solid #000;
+    }
+
+    .cartridge .p-tag {
+      align-self: flex-end;
+      background: #000;
+      color: #39ff6a;
+      padding: 2px 6px;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+
+    .pixel-art {
+      image-rendering: pixelated;
+    }
+
+    .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 4px, 3px 100%;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.6;
+    }
+
+    .click-tag {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      background: var(--gold);
+      color: #000;
+      font-size: 10px;
+      padding: 4px;
+      border: 2px solid #000;
+      transform: rotate(-10deg);
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    #lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #lightbox.active {
+      display: flex;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         animation: none !important;
@@ -733,17 +847,24 @@
 
 <body>
 
-  <div class="marquee-bar">
-    <div class="marquee-track pixel" style="font-family:'VT323',monospace;">
-      &#9733; METEPATLADI OFFICIAL WEBSITE &#9733; KİM SÖVDÜ BEYLER HABERİNİZ VAR MI MEVZUDAN?
-      &#9733; CS -> 👎 &#9733; MESCİT & HANGAR -> 👍 &#9733; PAPI CHULO &#9733;
+  <div class="marquee-bar" style="position: relative;">
+    <button id="pauseMarquee" class="pixel"
+      style="position: absolute; right: 10px; top: 4px; background: #000; color: var(--gold); border: 2px solid var(--gold); padding: 2px 6px; cursor: pointer; font-size: 10px; z-index: 10;"
+      aria-label="Pause Marquee">PAUSE</button>
+    <div class="marquee-track pixel" id="marqueeTrack" style="font-family:'VT323',monospace;">
+      &#9733; METEPATLADI OFFICIAL WEBSITE &#9733; <span lang="tr">KİM SÖVDÜ BEYLER HABERİNİZ VAR MI MEVZUDAN?</span>
+      &#9733; CS -&gt; 👎 &#9733; <span lang="tr">MESCİT & HANGAR</span> -&gt; 👍 &#9733; PAPI CHULO &#9733;
       &nbsp;&nbsp;&nbsp;&nbsp;
-      &#9733; METEPATLADI OFFICIAL WEBSITE &#9733; KİM SÖVDÜ BEYLER HABERİNİZ VAR MI MEVZUDAN?
-      &#9733; CS -> 👎 &#9733; MESCİT & HANGAR -> 👍 &#9733; PAPI CHULO &#9733;
+      &#9733; METEPATLADI OFFICIAL WEBSITE &#9733; <span lang="tr">KİM SÖVDÜ BEYLER HABERİNİZ VAR MI MEVZUDAN?</span>
+      &#9733; CS -&gt; 👎 &#9733; <span lang="tr">MESCİT & HANGAR</span> -&gt; 👍 &#9733; PAPI CHULO &#9733;
     </div>
   </div>
 
   <header class="hero">
+    <div class="scanlines" id="scanlines"></div>
+    <button id="toggleCRT" class="pixel"
+      style="position:absolute; top:10px; left:10px; z-index:60; background:#000; color:var(--neon-pink); border:2px solid var(--neon-pink); font-size:10px; padding:4px; cursor:pointer;"
+      aria-label="Toggle CRT Scanlines">CRT: ON</button>
     <div class="stars" aria-hidden="true">
       <span style="top:10px; left:8%; animation-delay:0s;">&#10022;</span>
       <span style="top:60px; left:88%; animation-delay:0.6s;">&#10022;</span>
@@ -755,7 +876,7 @@
     <p class="tagline">computer science student</p>
 
     <div class="hero-photo-frame" id="marioFrame" title="click me">
-      <img src="mario_firstphoto_in_site.jpg" alt="mario" width="260" height="260">
+      <img src="mario_firstphoto_in_site.jpg" alt="mario" width="260" height="260" class="pixel-art">
     </div>
 
     <div class="hero-buttons">
@@ -768,25 +889,28 @@
   <div class="sides-container">
     <!-- LEFT SIDE FANS -->
     <aside class="side-fans side-fans-left">
-      <div class="sticker badge-stonecold card-stonecold">
+      <div class="sticker badge-stonecold card-stonecold" title="▶ CLICK ME">
         <div class="s-photo-wrap fan-bg-stonecold">
           <a href="https://youtu.be/YemT1Usi4MY" target="_blank" rel="noopener noreferrer" style="display:contents;"
             aria-label="Watch Stone Cold Steve Austin video">
-            <img src="stonecold.png" alt="Stone Cold">
+            <img src="stonecold.png" alt="Stone Cold Steve Austin sticker" loading="lazy" width="185" height="185"
+              class="pixel-art">
           </a>
         </div>
+        <div class="click-tag pixel">▶ CLICK ME</div>
       </div>
     </aside>
 
     <!-- RIGHT SIDE FANS -->
     <aside class="side-fans side-fans-right">
-      <div class="sticker badge-messi card-messi">
+      <div class="sticker badge-messi card-messi" title="▶ CLICK ME">
         <div class="s-photo-wrap fan-bg-messi">
           <a href="https://youtu.be/arP_a_PE6Js" target="_blank" rel="noopener noreferrer" style="display:contents;"
-            aria-label="Watch Messi video">
-            <img src="messi.png" alt="Messi">
+            aria-label="Watch Lionel Messi video">
+            <img src="messi.png" alt="Lionel Messi sticker" loading="lazy" width="185" height="185" class="pixel-art">
           </a>
         </div>
+        <div class="click-tag pixel">▶ CLICK ME</div>
       </div>
     </aside>
   </div>
@@ -795,6 +919,8 @@
     <nav class="sidebar" id="sideNav">
       <div class="menu-title">&#9733; MENU &#9733;</div>
       <a href="#about" data-sec="about">ABOUT</a>
+      <a href="#projects" data-sec="projects">PROJECTS <span class="blink"
+          style="color:var(--neon-pink); font-size:14px; margin-left:4px;">NEW!</span></a>
       <a href="#links" data-sec="links">LINKS</a>
       <a href="#gallery" data-sec="gallery">GALLERY</a>
       <a href="#contact" data-sec="contact">CONTACT</a>
@@ -807,8 +933,8 @@
         <div class="about-flex">
           <div class="about-photo">
             <img src="aboutmephoto.png"
-              alt="Stylized purple-toned edit of Metehan Karadeniz with a Nyan Cat sticker and flame border"
-              width="170">
+              alt="Stylized purple-toned edit of Metehan Karadeniz with a Nyan Cat sticker and flame border" width="170"
+              height="170" loading="lazy" class="pixel-art">
           </div>
           <div class="about-text">
             <p>I'm a Computer Science student at <strong>Bilkent University</strong> in Ankara, currently working on
@@ -820,11 +946,23 @@
               department was my first experience of creating a Hamachi server in Minecraft. Outside of coding, my
               hobbies include watching pro wrestling (mainly WWE), watching and playing football, and playing sports,
               FPS, and story-based video games. I also love rap and mainly listen to Eminem's music.</p>
-            <p>Since starting Computer Science, I have worked on two projects, which can be seen on my GitHub page
-              below. My first project, <strong>SeeMore</strong>, is a traveling guide application, and my second
-              project, <strong>Crescendo</strong>, is a music discovery and review application. Both of these
-              applications were written in Java.</p>
           </div>
+        </div>
+      </section>
+
+      <section id="projects" class="panel">
+        <h2>&#9734; Projects &#9734;</h2>
+        <div class="project-cards">
+          <a class="cartridge" href="https://github.com/metehankaraden1z/SeeMore" target="_blank" rel="noopener">
+            <span class="p-title">SeeMore</span>
+            <span class="p-desc">A comprehensive traveling guide application.</span>
+            <span class="p-tag">Java</span>
+          </a>
+          <a class="cartridge" href="https://github.com/metehankaraden1z/Crescendo" target="_blank" rel="noopener">
+            <span class="p-title">Crescendo</span>
+            <span class="p-desc">A music discovery and review application.</span>
+            <span class="p-tag">Java</span>
+          </a>
         </div>
       </section>
 
@@ -845,9 +983,7 @@
           rel="noopener">&#127925;&nbsp; Spotify <span class="arrow">&#8594;</span></a>
         <a class="link-row" href="https://steamcommunity.com/profiles/76561198804642807/" target="_blank"
           rel="noopener">&#127918;&nbsp; Steam <span class="arrow">&#8594;</span></a>
-        <a class="link-row" href="mailto:karadenizmetehan25@gmail.com">&#9993;&nbsp; Email (primary) <span
-            class="arrow">&#8594;</span></a>
-        <a class="link-row" href="mailto:mete25063425@hotmail.com">&#9993;&nbsp; Email (secondary) <span
+        <a class="link-row" href="mailto:karadenizmetehan25@gmail.com">&#9993;&nbsp; Email <span
             class="arrow">&#8594;</span></a>
       </section>
 
@@ -857,10 +993,12 @@
         <h2>&#9734; Screenshots &#9734;</h2>
         <div class="gallery">
           <figure class="polaroid">
-            <img src="lookinatthepaper_replacement.jpeg" alt="looking at paper">
+            <img src="lookinatthepaper_replacement.jpeg" alt="looking at paper" loading="lazy">
+            <figcaption style="margin-top: 10px;">looking at paper</figcaption>
           </figure>
           <figure class="polaroid">
-            <img src="iguessbro.jpeg" alt="i guess bro">
+            <img src="iguessbro.jpeg" alt="i guess bro" loading="lazy">
+            <figcaption style="margin-top: 10px;">i guess bro</figcaption>
           </figure>
         </div>
       </section>
@@ -868,9 +1006,16 @@
       <section id="contact" class="panel">
         <h2>&#9734; Say Something &#9734;</h2>
         <p>If you got something to say, email me and I'll consider pasting some of them here.</p>
-        <div class="hero-buttons" style="justify-content:flex-start;">
+        <div class="hero-buttons" style="justify-content:flex-start; margin-bottom: 20px;">
           <a class="btn3d btn-gold" href="mailto:karadenizmetehan25@gmail.com?subject=Guestbook%20entry">&#9993; LEAVE A
             MESSAGE</a>
+        </div>
+        <div class="guestbook-entries"
+          style="border:2px dashed var(--neon-pink); padding:15px; background:var(--ink); color:var(--paper); font-size:20px;">
+          <div style="color:var(--neon-cyan); margin-bottom:10px;" class="pixel">LAST VISITORS SAID:</div>
+          <p style="margin:5px 0;">"best site ever 😎" - anon</p>
+          <p style="margin:5px 0;">"W site 🔥" - zuckerberg</p>
+          <p style="margin:5px 0;">"hire this man" - recruiter</p>
         </div>
       </section>
 
@@ -885,12 +1030,25 @@
     <div>You are visitor number:</div>
     <div class="counter" id="counterBox"></div>
     <div> If you are reading here, why?</div>
-    <div> Version 0.29<div>
-        <div>&copy; 2026 Metehan Karadeniz &middot; Ankara, Türkiye &middot; Built with html and a couple packs of
-          midnight blue
-
-        </div>
+    <div> Version 0.30</div>
+    <div>&copy; 2026 Metehan Karadeniz &middot; Ankara, Türkiye &middot; Built with html and a couple packs of midnight
+      blue</div>
+    <div style="margin-top: 15px;">
+      <img src="https://cyber.dabamos.de/88x31/netscape4.gif" alt="Best viewed in Netscape"
+        title="Best viewed in Netscape" style="image-rendering: pixelated;">
+      <img src="https://cyber.dabamos.de/88x31/notepad.gif" alt="Built with Notepad" title="Built with Notepad"
+        style="image-rendering: pixelated;">
+    </div>
   </footer>
+
+  <!-- Lightbox Container -->
+  <div id="lightbox">
+    <div class="polaroid" style="transform:none; box-shadow:0 0 20px #000; cursor:default;">
+      <img id="lightbox-img" src="" alt="lightbox image" style="max-height: 80vh; width: auto; object-fit: contain;">
+      <figcaption id="lightbox-cap" style="font-size: 24px; font-family: 'Press Start 2P', cursive; margin-top:10px;">
+      </figcaption>
+    </div>
+  </div>
 
   <script>
     // scroll-spy for sidebar nav
@@ -915,9 +1073,12 @@
       frame.classList.add('shaking');
     });
 
-    // fake visitor counter, in-memory only, resets each visit
+    // localStorage visitor counter
     const box = document.getElementById('counterBox');
-    const finalCount = Math.floor(Math.random() * 89999) + 10000;
+    let visits = parseInt(localStorage.getItem('visitCount') || '10204', 10);
+    visits++;
+    localStorage.setItem('visitCount', visits);
+    const finalCount = visits;
     const digits = String(finalCount).padStart(6, '0').split('');
     digits.forEach(d => {
       const span = document.createElement('span');
@@ -937,6 +1098,45 @@
         if (step >= totalSteps) clearInterval(timer);
       }, 80);
     }
+
+    // lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCap = document.getElementById('lightbox-cap');
+    document.querySelectorAll('.gallery .polaroid').forEach(p => {
+      p.addEventListener('click', () => {
+        const img = p.querySelector('img');
+        const cap = p.querySelector('figcaption');
+        if (img && img.src) {
+          lightboxImg.src = img.src;
+          lightboxCap.textContent = cap ? cap.textContent : '';
+          lightbox.classList.add('active');
+        }
+      });
+    });
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('active');
+    });
+
+    // crt toggle
+    const crtBtn = document.getElementById('toggleCRT');
+    const scanlines = document.getElementById('scanlines');
+    let crtOn = true;
+    crtBtn.addEventListener('click', () => {
+      crtOn = !crtOn;
+      scanlines.style.display = crtOn ? 'block' : 'none';
+      crtBtn.textContent = crtOn ? 'CRT: ON' : 'CRT: OFF';
+    });
+
+    // pause marquee
+    const pauseMarqueeBtn = document.getElementById('pauseMarquee');
+    const marqueeTrack = document.getElementById('marqueeTrack');
+    let marqueePaused = false;
+    pauseMarqueeBtn.addEventListener('click', () => {
+      marqueePaused = !marqueePaused;
+      marqueeTrack.style.animationPlayState = marqueePaused ? 'paused' : 'running';
+      pauseMarqueeBtn.textContent = marqueePaused ? 'PLAY' : 'PAUSE';
+    });
   </script>
 
 </body>
