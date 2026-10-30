@@ -4,6 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // apply the saved light/dark choice before the page paints, so there is no flash
+    try {
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+    } catch (e) { }
+  </script>
   <title>Metehan Karadeniz | Computer Science Student</title>
   <meta name="description"
     content="Metehan Karadeniz is a Computer Science student at Bilkent University in Ankara, working with Java, Python and C++.">
@@ -50,30 +56,128 @@
 </script>
   <style>
     :root {
-      --ink: #0e1330;
-      --ink-2: #1a2150;
-      --cobalt: #2f52ff;
-      --coral: #ff6a3d;
-      --butter: #ffd84d;
-      --mint: #3fd7a5;
-      --bg: #f6f3ec;
-      --surface: #ffffff;
-      --text: #14172b;
-      --muted: #5d6275;
-      --line: #e2ddd1;
-      --shadow: 0 2px 4px rgba(14, 19, 48, 0.04), 0 12px 32px rgba(14, 19, 48, 0.08);
+      color-scheme: light;
+      /* palette: blue leads, near-white is the base, pink marks buttons and details */
+      --blue: #0593C6;
+      --white: #FCFFFF;
+      --pink: #D83995;
+      --blue-deep: #046c92;
+      --blue-ink: #04729a; /* blue for small text on light backgrounds */
+      --pink-soft: #ffc2e3;
+      --cyan: #e0f5fb; /* light cyan page background */
+      --cyan-soft: #f2fbfe; /* cards on the cyan background */
+      --ink: #06283a;
+      --bg: var(--cyan);
+      --surface: var(--cyan-soft);
+      --text: #0b2a38;
+      --muted: #4d6a78;
+      --line: #bfe2ec;
+      --shadow: 0 2px 4px rgba(3, 40, 56, 0.04), 0 12px 32px rgba(5, 147, 198, 0.1);
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0e22;
-        --surface: #141a3a;
-        --text: #eef0f8;
-        --muted: #a3a9c2;
-        --line: #252c55;
-        --shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
-      }
+    /* dark mode, switched with the button in the top bar */
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #03161f;
+      --surface: #0a2533;
+      --text: var(--white);
+      --muted: #9cbccb;
+      --line: #163f52;
+      --blue-ink: #5cc8ef;
+      --shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
     }
+
+    [data-theme="dark"] .topbar {
+      background: rgba(3, 58, 80, 0.95);
+      border-bottom-color: rgba(252, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .hero,
+    [data-theme="dark"] .contact-card {
+      background: linear-gradient(150deg, #0479a3 0%, #045d80 55%, #033f57 100%);
+    }
+
+    [data-theme="dark"] .ticker {
+      background: var(--blue-deep);
+    }
+
+    [data-theme="dark"] .fact b {
+      color: #5cc8ef;
+    }
+
+    /* brighter pink so small pink text stays readable on dark backgrounds */
+    [data-theme="dark"] .pill,
+    [data-theme="dark"] .wip {
+      color: #ff9fd2;
+    }
+
+    [data-theme="dark"] .card .repo,
+    [data-theme="dark"] .version .arr {
+      color: #ff8cc8;
+    }
+
+    [data-theme="dark"] .card:hover {
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+    }
+
+    body {
+      transition: background-color .3s ease, color .3s ease;
+    }
+
+    .theme-toggle {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(252, 255, 255, 0.35);
+      background: rgba(252, 255, 255, 0.12);
+      color: var(--white);
+      cursor: pointer;
+      transition: background .15s ease, transform .2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(252, 255, 255, 0.24);
+      transform: rotate(-15deg);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 3px;
+    }
+
+    .theme-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .theme-toggle .icon-moon {
+      fill: currentColor;
+    }
+
+    .theme-toggle .icon-sun {
+      display: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .theme-toggle .icon-sun circle {
+      fill: currentColor;
+      stroke: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-sun {
+      display: block;
+    }
+
 
     * {
       box-sizing: border-box;
@@ -95,15 +199,10 @@
     }
 
     a {
-      color: var(--cobalt);
+      color: var(--blue-ink);
       text-underline-offset: 3px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      a {
-        color: #8ea2ff;
-      }
-    }
 
     .wrap {
       max-width: 1040px;
@@ -132,10 +231,10 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(14, 19, 48, 0.94);
+      background: rgba(5, 147, 198, 0.94);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(252, 255, 255, 0.25);
     }
 
     .topbar .wrap {
@@ -164,8 +263,8 @@
       place-items: center;
       font-family: 'Fraunces', serif;
       font-size: 15px;
-      color: var(--ink);
-      background: linear-gradient(135deg, var(--butter), var(--coral));
+      color: var(--white);
+      background: linear-gradient(135deg, #ee6cb5, var(--pink));
     }
 
     .nav {
@@ -176,7 +275,7 @@
     }
 
     .nav a {
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(252, 255, 255, 0.9);
       text-decoration: none;
       transition: color .15s ease;
     }
@@ -189,7 +288,7 @@
     .hero {
       position: relative;
       color: #fff;
-      background: var(--ink);
+      background: linear-gradient(150deg, #2cb2e2 0%, var(--blue) 55%, #0489b9 100%);
       overflow: hidden;
       isolation: isolate;
     }
@@ -201,9 +300,9 @@
       inset: -20%;
       z-index: -2;
       background:
-        radial-gradient(40% 50% at 78% 30%, rgba(47, 82, 255, 0.75), transparent 70%),
-        radial-gradient(35% 45% at 92% 85%, rgba(255, 106, 61, 0.6), transparent 70%),
-        radial-gradient(30% 40% at 10% 90%, rgba(63, 215, 165, 0.28), transparent 70%);
+        radial-gradient(40% 50% at 78% 30%, rgba(252, 255, 255, 0.28), transparent 70%),
+        radial-gradient(35% 45% at 92% 85%, rgba(216, 57, 149, 0.38), transparent 70%),
+        radial-gradient(30% 40% at 10% 90%, rgba(252, 255, 255, 0.2), transparent 70%);
       animation: mesh 18s ease-in-out infinite alternate;
     }
 
@@ -238,7 +337,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      color: var(--butter);
+      color: var(--white);
       margin-bottom: 22px;
     }
 
@@ -246,10 +345,11 @@
       content: "";
       width: 28px;
       height: 2px;
-      background: var(--butter);
+      background: var(--pink);
     }
 
     .hero h1 {
+      text-shadow: 0 2px 12px rgba(3, 60, 84, 0.18);
       font-size: clamp(48px, 8vw, 92px);
       margin: 0 0 22px;
       font-weight: 700;
@@ -259,7 +359,7 @@
       display: block;
       font-style: italic;
       font-weight: 500;
-      background: linear-gradient(90deg, var(--butter) 0%, var(--coral) 55%, #ff8fb1 100%);
+      background: linear-gradient(90deg, var(--white) 0%, var(--pink-soft) 60%, #ff9fd2 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -268,8 +368,9 @@
 
     .hero .role {
       font-size: 20px;
-      color: rgba(255, 255, 255, 0.82);
+      color: var(--white);
       max-width: 520px;
+      text-shadow: 0 1px 2px rgba(3, 60, 84, 0.3);
       margin: 0 0 30px;
     }
 
@@ -305,15 +406,15 @@
     }
 
     .btn-primary {
-      color: var(--ink);
+      color: var(--white);
       border-color: transparent;
-      background: linear-gradient(135deg, var(--butter), var(--coral));
-      box-shadow: 0 8px 24px rgba(255, 106, 61, 0.35);
+      background: linear-gradient(135deg, var(--pink), #c22a83);
+      box-shadow: 0 8px 24px rgba(216, 57, 149, 0.4);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, var(--butter), var(--coral));
-      box-shadow: 0 12px 30px rgba(255, 106, 61, 0.5);
+      background: linear-gradient(135deg, #e04da3, var(--pink));
+      box-shadow: 0 12px 30px rgba(216, 57, 149, 0.55);
     }
 
     .btn svg {
@@ -338,13 +439,13 @@
     .portrait .block-a {
       inset: 0;
       transform: translate(22px, 22px) rotate(4deg);
-      background: linear-gradient(135deg, var(--coral), #ff8fb1);
+      background: linear-gradient(135deg, var(--pink), #f07ab9);
     }
 
     .portrait .block-b {
       inset: 0;
       transform: translate(-16px, -16px) rotate(-3deg);
-      border: 2px solid rgba(255, 216, 77, 0.8);
+      border: 2px solid rgba(252, 255, 255, 0.75);
     }
 
     .portrait img {
@@ -365,8 +466,8 @@
       width: 132px;
       height: 132px;
       border-radius: 50%;
-      background: var(--butter);
-      color: var(--ink);
+      background: var(--cyan);
+      color: var(--blue-deep);
       display: grid;
       place-items: center;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
@@ -384,14 +485,14 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       letter-spacing: 1.35px;
-      fill: var(--ink);
+      fill: var(--blue-deep);
     }
 
     .badge .core {
       width: 46px;
       height: 46px;
       border-radius: 50%;
-      background: var(--ink);
+      background: var(--blue);
       display: grid;
       place-items: center;
     }
@@ -401,8 +502,8 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--mint);
-      box-shadow: 0 0 0 5px rgba(63, 215, 165, 0.3);
+      background: var(--pink);
+      box-shadow: 0 0 0 5px rgba(216, 57, 149, 0.3);
       animation: pulse 2s ease-in-out infinite;
     }
 
@@ -414,17 +515,17 @@
 
     @keyframes pulse {
       50% {
-        box-shadow: 0 0 0 9px rgba(63, 215, 165, 0);
+        box-shadow: 0 0 0 9px rgba(216, 57, 149, 0);
       }
     }
 
     /* ---------- skills ticker ---------- */
     .ticker {
-      background: var(--butter);
-      color: var(--ink);
+      background: var(--blue);
+      color: var(--white);
       overflow: hidden;
       white-space: nowrap;
-      border-block: 2px solid var(--ink);
+      border-block: 2px solid var(--white);
       transform: rotate(-1.2deg);
       margin: -18px -10px 0;
       position: relative;
@@ -446,7 +547,7 @@
       content: "✦";
       font-style: normal;
       margin-left: 34px;
-      color: var(--coral);
+      color: var(--pink-soft);
     }
 
     @keyframes tick {
@@ -479,7 +580,7 @@
       font-size: 64px;
       font-weight: 700;
       line-height: 1;
-      background: linear-gradient(135deg, var(--cobalt), var(--coral));
+      background: linear-gradient(135deg, var(--blue), var(--pink));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -497,7 +598,7 @@
     section h2 em {
       font-style: italic;
       font-weight: 500;
-      color: var(--coral);
+      color: var(--pink);
     }
 
     section p {
@@ -534,14 +635,9 @@
       font-family: 'Fraunces', serif;
       font-size: 30px;
       line-height: 1.1;
-      color: var(--cobalt);
+      color: var(--blue);
     }
 
-    @media (prefers-color-scheme: dark) {
-      .fact b {
-        color: var(--butter);
-      }
-    }
 
     .fact span {
       font-size: 14px;
@@ -566,7 +662,7 @@
       top: 0;
       bottom: 0;
       width: 6px;
-      background: linear-gradient(180deg, var(--cobalt), var(--coral));
+      background: linear-gradient(180deg, var(--blue), var(--pink));
     }
 
     .edu .row {
@@ -588,9 +684,11 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 600;
-      color: var(--ink);
-      background: var(--mint);
+      color: #a51f6d;
+      background: color-mix(in srgb, var(--pink) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--pink) 35%, transparent);
     }
+
 
     /* skills */
     .skills {
@@ -625,7 +723,7 @@
       width: 10px;
       height: 10px;
       border-radius: 3px;
-      background: var(--c, var(--cobalt));
+      background: var(--c, var(--blue));
     }
 
     .tags {
@@ -642,8 +740,8 @@
       font-weight: 600;
       padding: 6px 13px;
       border-radius: 999px;
-      background: color-mix(in srgb, var(--c, var(--cobalt)) 14%, transparent);
-      border: 1px solid color-mix(in srgb, var(--c, var(--cobalt)) 35%, transparent);
+      background: color-mix(in srgb, var(--c, var(--blue)) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--c, var(--blue)) 35%, transparent);
     }
 
     /* projects */
@@ -668,7 +766,7 @@
 
     .card:hover {
       transform: translateY(-6px) rotate(-0.4deg);
-      box-shadow: 0 24px 48px rgba(14, 19, 48, 0.18);
+      box-shadow: 0 24px 48px rgba(3, 40, 56, 0.16);
     }
 
     .card .cover {
@@ -691,11 +789,11 @@
     }
 
     .cover-1 {
-      background: linear-gradient(135deg, var(--cobalt) 0%, #6b4dff 60%, var(--mint) 130%);
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
     }
 
     .cover-2 {
-      background: linear-gradient(135deg, var(--coral) 0%, #ff4f8b 55%, var(--butter) 130%);
+      background: linear-gradient(135deg, var(--blue) 0%, #3fb0dc 50%, var(--pink) 125%);
     }
 
     .card .cover .big {
@@ -716,7 +814,7 @@
       font-size: 12px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(14, 19, 48, 0.55);
+      background: rgba(3, 40, 56, 0.5);
     }
 
     .card .body {
@@ -740,17 +838,12 @@
     .card .repo {
       font-weight: 600;
       font-size: 14px;
-      color: var(--cobalt);
+      color: var(--pink);
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .card .repo {
-        color: #8ea2ff;
-      }
-    }
 
     .card:hover .repo .arr {
       transform: translate(3px, -3px);
@@ -778,7 +871,7 @@
     }
 
     .project > summary:focus-visible {
-      outline: 3px solid var(--cobalt);
+      outline: 3px solid var(--blue);
       outline-offset: -3px;
       border-radius: 22px;
     }
@@ -800,9 +893,9 @@
       font-weight: 600;
       letter-spacing: .04em;
       text-transform: uppercase;
-      color: #8a5600;
-      background: color-mix(in srgb, var(--butter) 35%, transparent);
-      border: 1px solid color-mix(in srgb, var(--butter) 75%, transparent);
+      color: #a51f6d;
+      background: color-mix(in srgb, var(--pink) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--pink) 40%, transparent);
     }
 
     .wip::before {
@@ -810,7 +903,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--coral);
+      background: var(--pink);
       animation: wip-pulse 1.6s ease-in-out infinite;
     }
 
@@ -861,7 +954,7 @@
       padding: 14px 16px;
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--cobalt) 5%, transparent);
+      background: color-mix(in srgb, var(--blue) 6%, transparent);
       color: var(--text);
       text-decoration: none;
       transition: border-color .2s ease, background .2s ease, transform .2s ease;
@@ -869,8 +962,8 @@
 
     .version:hover,
     .version:focus-visible {
-      border-color: var(--cobalt);
-      background: color-mix(in srgb, var(--cobalt) 11%, transparent);
+      border-color: var(--blue);
+      background: color-mix(in srgb, var(--blue) 12%, transparent);
       transform: translateY(-2px);
     }
 
@@ -890,18 +983,9 @@
       grid-column: 2;
       align-self: center;
       font-size: 18px;
-      color: var(--cobalt);
+      color: var(--pink);
     }
 
-    @media (prefers-color-scheme: dark) {
-      .wip {
-        color: var(--butter);
-      }
-
-      .version .arr {
-        color: #8ea2ff;
-      }
-    }
 
     @media (max-width: 520px) {
       .versions {
@@ -925,7 +1009,7 @@
       border-radius: 28px;
       padding: 56px 48px;
       color: #fff;
-      background: var(--ink);
+      background: linear-gradient(150deg, #2cb2e2 0%, var(--blue) 55%, #0489b9 100%);
     }
 
     .contact-card::before {
@@ -934,8 +1018,8 @@
       inset: 0;
       z-index: -1;
       background:
-        radial-gradient(50% 80% at 100% 0%, rgba(47, 82, 255, 0.8), transparent 70%),
-        radial-gradient(40% 70% at 0% 100%, rgba(255, 106, 61, 0.55), transparent 70%);
+        radial-gradient(50% 80% at 100% 0%, rgba(252, 255, 255, 0.25), transparent 70%),
+        radial-gradient(40% 70% at 0% 100%, rgba(216, 57, 149, 0.38), transparent 70%);
     }
 
     .contact-card h2 {
@@ -945,11 +1029,11 @@
     }
 
     .contact-card h2 em {
-      color: var(--butter);
+      color: var(--pink-soft);
     }
 
     .contact-card p {
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--white);
       max-width: 520px;
       margin-bottom: 28px;
     }
@@ -961,7 +1045,7 @@
       font-style: italic;
       color: #fff;
       text-decoration: none;
-      border-bottom: 3px solid var(--coral);
+      border-bottom: 3px solid var(--pink);
       padding-bottom: 2px;
       margin-bottom: 30px;
       word-break: break-all;
@@ -969,7 +1053,7 @@
     }
 
     .contact-card .email:hover {
-      border-color: var(--butter);
+      border-color: var(--white);
     }
 
     .contact-card .meta {
@@ -977,7 +1061,7 @@
       flex-wrap: wrap;
       gap: 8px 26px;
       font-size: 15px;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(252, 255, 255, 0.92);
     }
 
     .contact-card .meta a {
@@ -1139,6 +1223,15 @@
         <a class="nav-link" href="#skills">Skills</a>
         <a class="nav-link" href="#projects">Projects</a>
         <a class="nav-link" href="#contact">Contact</a>
+        <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" title="Dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a8.5 8.5 0 1 0 11.5 11.5z" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" />
+            <path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" />
+          </svg>
+        </button>
       </nav>
     </div>
   </header>
@@ -1236,7 +1329,7 @@
       <div>
         <h2>What I <em>work with.</em></h2>
         <div class="skills">
-          <div class="skill-group" style="--c: var(--cobalt);">
+          <div class="skill-group" style="--c: var(--blue);">
             <h3>Languages</h3>
             <ul class="tags">
               <li>Java</li>
@@ -1244,7 +1337,7 @@
               <li>C++</li>
             </ul>
           </div>
-          <div class="skill-group" style="--c: var(--coral);">
+          <div class="skill-group" style="--c: var(--pink);">
             <h3>Practices &amp; tools</h3>
             <ul class="tags">
               <li>Object-oriented design</li>
@@ -1252,7 +1345,7 @@
               <li>Team projects</li>
             </ul>
           </div>
-          <div class="skill-group" style="--c: var(--mint);">
+          <div class="skill-group" style="--c: var(--blue-deep);">
             <h3>Spoken</h3>
             <ul class="tags">
               <li>Turkish (native)</li>
@@ -1339,6 +1432,27 @@
     } else {
       revealEls.forEach(el => el.classList.add('in'));
     }
+
+    // light/dark toggle; the choice is remembered in this browser
+    const themeBtn = document.querySelector('.theme-toggle');
+    const syncThemeButton = () => {
+      const dark = document.documentElement.dataset.theme === 'dark';
+      themeBtn.setAttribute('aria-pressed', String(dark));
+      themeBtn.title = dark ? 'Light mode' : 'Dark mode';
+    };
+    themeBtn.addEventListener('click', () => {
+      const dark = document.documentElement.dataset.theme !== 'dark';
+      if (dark) {
+        document.documentElement.dataset.theme = 'dark';
+      } else {
+        delete document.documentElement.dataset.theme;
+      }
+      try {
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      } catch (e) { }
+      syncThemeButton();
+    });
+    syncThemeButton();
   </script>
 
 </body>
