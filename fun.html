@@ -699,6 +699,7 @@
     }
 
     .cd .disc {
+      display: block;
       width: 120px;
       height: 120px;
       margin: 0 auto 14px;
@@ -739,6 +740,69 @@
       background: #14112a;
       padding: 1px 10px;
       border-radius: 999px;
+    }
+
+    /* the Crescendo CD opens to pick the web or Android version */
+    .cd-project {
+      width: 260px;
+    }
+
+    .cd-project > summary {
+      display: block;
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .cd-project > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .cd-project > summary:focus-visible {
+      outline: 3px dashed var(--hot-pink);
+      outline-offset: 6px;
+      border-radius: 6px;
+    }
+
+    .cd .p-wip {
+      display: table;
+      margin: 0 auto 10px;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      color: #14112a;
+      padding: 1px 10px;
+      border: 1px solid #14112a;
+      border-radius: 4px;
+      background: repeating-linear-gradient(45deg, #ffd84d 0 10px, #ffeb94 10px 20px);
+    }
+
+    .cd .p-hint {
+      display: block;
+      margin-top: 12px;
+      text-align: center;
+      font-family: 'VT323', monospace;
+      font-size: 17px;
+      color: var(--cyber-blue);
+    }
+
+    .cd-project .when-open,
+    .cd-project[open] .when-closed {
+      display: none;
+    }
+
+    .cd-project[open] .when-open {
+      display: inline;
+    }
+
+    .cd-versions {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .cd-versions .gloss {
+      text-align: center;
+      font-size: 15px;
+      padding: 10px 16px;
     }
 
     /* ---------- gallery ---------- */
@@ -1147,18 +1211,23 @@
         </div>
         <div class="body">
           <div class="project-cards">
-            <a class="cd" href="https://github.com/ceydasirkeci/CS102-Project" target="_blank" rel="noopener">
-              <span class="disc" aria-hidden="true"></span>
-              <span class="p-title">SeeMore</span>
-              <span class="p-desc">A comprehensive traveling guide application.</span>
-              <span class="p-tag">Java</span>
-            </a>
-            <a class="cd" href="https://github.com/Sentinels-Music/Crescendo" target="_blank" rel="noopener">
-              <span class="disc" aria-hidden="true"></span>
-              <span class="p-title">Crescendo</span>
-              <span class="p-desc">A music discovery and review application.</span>
-              <span class="p-tag">Java</span>
-            </a>
+            <details class="cd cd-project">
+              <summary>
+                <span class="disc" aria-hidden="true"></span>
+                <span class="p-title">Crescendo</span>
+                <span class="p-wip"><span class="blink" aria-hidden="true">&#9654;</span> WORK IN PROGRESS</span>
+                <span class="p-desc">A track-by-track music rating app.</span>
+                <span class="p-tag">Python · Flutter</span>
+                <span class="p-hint"><span class="when-closed">&#9660; click to pick a version &#9660;</span><span
+                    class="when-open">&#9650; hide versions &#9650;</span></span>
+              </summary>
+              <div class="cd-versions">
+                <a class="gloss gloss-blue" href="https://github.com/metehankaraden1z/crescendo-web" target="_blank"
+                  rel="noopener">&#127760; WEB</a>
+                <a class="gloss gloss-pink" href="https://github.com/metehankaraden1z/crescendo-android" target="_blank"
+                  rel="noopener">&#128241; ANDROID APP</a>
+              </div>
+            </details>
           </div>
         </div>
       </section>
