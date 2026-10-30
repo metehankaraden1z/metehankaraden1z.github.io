@@ -760,6 +760,163 @@
       transition: transform .2s ease;
     }
 
+    /* single expandable project: click to choose the web or Android version */
+    .projects:has(> .project:only-child) {
+      grid-template-columns: minmax(0, 580px);
+    }
+
+    .project > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .project > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .project > summary:focus-visible {
+      outline: 3px solid var(--cobalt);
+      outline-offset: -3px;
+      border-radius: 22px;
+    }
+
+    .project[open]:hover {
+      transform: none;
+    }
+
+    .wip {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #8a5600;
+      background: color-mix(in srgb, var(--butter) 35%, transparent);
+      border: 1px solid color-mix(in srgb, var(--butter) 75%, transparent);
+    }
+
+    .wip::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--coral);
+      animation: wip-pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes wip-pulse {
+      50% {
+        opacity: .35;
+        transform: scale(.7);
+      }
+    }
+
+    .project .repo .chev {
+      display: inline-block;
+      transition: transform .2s ease;
+    }
+
+    .project[open] .repo .chev {
+      transform: rotate(180deg);
+    }
+
+    .project .when-open,
+    .project[open] .when-closed {
+      display: none;
+    }
+
+    .project[open] .when-open {
+      display: inline;
+    }
+
+    .versions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 24px 24px;
+      animation: versions-in .25s ease;
+    }
+
+    @keyframes versions-in {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+
+    .version {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      row-gap: 2px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--cobalt) 5%, transparent);
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+
+    .version:hover,
+    .version:focus-visible {
+      border-color: var(--cobalt);
+      background: color-mix(in srgb, var(--cobalt) 11%, transparent);
+      transform: translateY(-2px);
+    }
+
+    .version .v-name {
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .version .v-desc {
+      grid-column: 1;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .version .arr {
+      grid-row: 1 / span 2;
+      grid-column: 2;
+      align-self: center;
+      font-size: 18px;
+      color: var(--cobalt);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .wip {
+        color: var(--butter);
+      }
+
+      .version .arr {
+        color: #8ea2ff;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .versions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .wip::before,
+      .versions {
+        animation: none;
+      }
+    }
+
     /* contact */
     .contact-card {
       position: relative;
@@ -1111,24 +1268,33 @@
       <div>
         <h2>Things I've <em>built.</em></h2>
         <div class="projects">
-          <a class="card" href="https://github.com/ceydasirkeci/CS102-Project" target="_blank" rel="noopener">
-            <div class="cover cover-1"><span class="big">S</span><span class="lang">JAVA</span></div>
-            <div class="body">
-              <h3>SeeMore</h3>
-              <p>A comprehensive travel guide application that helps users discover and plan places to visit.
-                Built as a team project for Bilkent's CS102 course.</p>
-              <span class="repo">View on GitHub <span class="arr">&#8599;</span></span>
+          <details class="card project">
+            <summary>
+              <div class="cover cover-2"><span class="big">C</span><span class="lang">PYTHON · FLUTTER</span></div>
+              <div class="body">
+                <h3>Crescendo</h3>
+                <span class="wip">Work in progress</span>
+                <p>A track-by-track music rating app: search any album, rate it song by song, and watch your taste
+                  profile build itself.</p>
+                <span class="repo">
+                  <span class="when-closed">Choose a version</span><span class="when-open">Hide versions</span>
+                  <span class="chev" aria-hidden="true">&#8964;</span>
+                </span>
+              </div>
+            </summary>
+            <div class="versions">
+              <a class="version" href="https://github.com/metehankaraden1z/crescendo-web" target="_blank" rel="noopener">
+                <span class="v-name">Web</span>
+                <span class="v-desc">Website &amp; server · Python</span>
+                <span class="arr" aria-hidden="true">&#8599;</span>
+              </a>
+              <a class="version" href="https://github.com/metehankaraden1z/crescendo-android" target="_blank" rel="noopener">
+                <span class="v-name">Android app</span>
+                <span class="v-desc">Mobile app · Flutter</span>
+                <span class="arr" aria-hidden="true">&#8599;</span>
+              </a>
             </div>
-          </a>
-          <a class="card" href="https://github.com/Sentinels-Music/Crescendo" target="_blank" rel="noopener">
-            <div class="cover cover-2"><span class="big">C</span><span class="lang">JAVA</span></div>
-            <div class="body">
-              <h3>Crescendo</h3>
-              <p>A music discovery and review application where users can find new music and share their opinions
-                on it. Developed as a team.</p>
-              <span class="repo">View on GitHub <span class="arr">&#8599;</span></span>
-            </div>
-          </a>
+          </details>
         </div>
       </div>
     </section>
