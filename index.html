@@ -471,6 +471,70 @@
       box-shadow: 0 12px 30px rgba(216, 57, 149, 0.55);
     }
 
+    /* "Download CV" button: opens a small menu to pick English or Turkish */
+    .cv-menu {
+      position: relative;
+    }
+
+    .cv-menu > summary {
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .cv-menu > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .cv-menu > summary:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 3px;
+    }
+
+    .cv-menu[open] > summary {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .cv-options {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      z-index: 5;
+      min-width: 180px;
+      padding: 6px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 36px rgba(3, 40, 56, 0.28);
+      animation: versions-in .2s ease;
+    }
+
+    .cv-options a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .cv-options a:hover,
+    .cv-options a:focus-visible {
+      background: color-mix(in srgb, var(--blue) 12%, transparent);
+      outline: none;
+    }
+
+    .cv-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: var(--white);
+      background: var(--pink);
+    }
+
     .btn svg {
       width: 16px;
       height: 16px;
@@ -1413,6 +1477,18 @@
             </svg>
             GitHub
           </a>
+          <details class="cv-menu">
+            <summary class="btn">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3a1 1 0 0 1 1 1v9.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.3V4a1 1 0 0 1 1-1zM4 19a1 1 0 0 1 1 1h14a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2 1 1 0 0 1 1-1z" />
+              </svg>
+              Download CV
+            </summary>
+            <div class="cv-options">
+              <a href="Metehan_Karadeniz_CV_EN.pdf" download><span class="cv-code">EN</span> English</a>
+              <a href="Metehan_Karadeniz_CV_TR.pdf" download lang="tr"><span class="cv-code">TR</span> Türkçe</a>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -1651,6 +1727,21 @@
       if (e.key === 'Escape' && navLinks.classList.contains('open')) {
         setMenu(false);
         menuBtn.focus();
+      }
+    });
+
+    // CV menu: close it after a choice, on a click elsewhere, or with Escape
+    const cvMenu = document.querySelector('.cv-menu');
+    cvMenu.querySelector('.cv-options').addEventListener('click', e => {
+      if (e.target.closest('a')) cvMenu.open = false;
+    });
+    document.addEventListener('click', e => {
+      if (cvMenu.open && !cvMenu.contains(e.target)) cvMenu.open = false;
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && cvMenu.open) {
+        cvMenu.open = false;
+        cvMenu.querySelector('summary').focus();
       }
     });
 
