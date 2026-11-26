@@ -494,9 +494,10 @@
       background: rgba(255, 255, 255, 0.16);
     }
 
+    /* opens upward: below the button the hero ends and the skills ticker would cover it */
     .cv-options {
       position: absolute;
-      top: calc(100% + 8px);
+      bottom: calc(100% + 8px);
       left: 0;
       z-index: 5;
       min-width: 180px;
@@ -504,8 +505,15 @@
       border-radius: 12px;
       background: var(--surface);
       border: 1px solid var(--line);
-      box-shadow: 0 16px 36px rgba(3, 40, 56, 0.28);
-      animation: versions-in .2s ease;
+      box-shadow: 0 -12px 36px rgba(3, 40, 56, 0.28);
+      animation: cv-up .2s ease;
+    }
+
+    @keyframes cv-up {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
     }
 
     .cv-options a {
