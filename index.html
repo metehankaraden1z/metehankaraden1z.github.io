@@ -5,10 +5,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // apply the saved light/dark choice before the page paints, so there is no flash
-    try {
-      if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark';
-    } catch (e) { }
+    // mark that JS runs, so the scroll-in animation only hides content when it can reveal it again
+    document.documentElement.classList.add('js');
+    // apply the light/dark theme before the page paints, so there is no flash:
+    // a choice saved with the toggle wins, otherwise follow the device setting
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) { }
+      var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (saved === null && systemDark)) document.documentElement.dataset.theme = 'dark';
+    })();
   </script>
   <title>Metehan Karadeniz | Computer Science Student</title>
   <meta name="description"
@@ -18,9 +24,14 @@
   <meta name="application-name" content="Metehan Karadeniz">
   <meta property="og:description"
     content="Computer Science student at Bilkent University. Projects, skills and contact details.">
-  <meta property="og:image" content="https://metehankaradeniz.com/headshot.jpg">
+  <meta property="og:type" content="profile">
+  <meta property="og:image" content="https://metehankaradeniz.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Metehan Karadeniz, Computer Science student at Bilkent University">
   <meta property="og:url" content="https://metehankaradeniz.com/">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0593C6">
   <link rel="canonical" href="https://metehankaradeniz.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -282,6 +293,49 @@
 
     .nav a:hover {
       color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* menu button, only shown on small screens */
+    .menu-toggle {
+      display: none;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(252, 255, 255, 0.35);
+      background: rgba(252, 255, 255, 0.12);
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    .menu-toggle:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 3px;
+    }
+
+    .menu-toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .menu-toggle .icon-close,
+    .menu-toggle[aria-expanded="true"] .icon-menu {
+      display: none;
+    }
+
+    .menu-toggle[aria-expanded="true"] .icon-close {
+      display: block;
     }
 
     /* ---------- hero ---------- */
@@ -1085,14 +1139,14 @@
       color: var(--muted);
     }
 
-    /* reveal on scroll */
-    .reveal {
+    /* reveal on scroll (only when JS runs; without it everything stays visible) */
+    .js .reveal {
       opacity: 0;
       transform: translateY(24px);
       transition: opacity .7s ease, transform .7s ease;
     }
 
-    .reveal.in {
+    .js .reveal.in {
       opacity: 1;
       transform: none;
     }
@@ -1143,12 +1197,45 @@
     }
 
     @media (max-width: 640px) {
-      .nav .nav-link {
-        display: none;
+      .nav {
+        gap: 10px;
       }
 
-      .brand .full {
+      .menu-toggle {
+        display: grid;
+      }
+
+      /* section links drop down under the top bar when the menu button is pressed */
+      .nav-links {
         display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 24px 16px;
+        background: rgba(5, 147, 198, 0.97);
+        border-bottom: 1px solid rgba(252, 255, 255, 0.25);
+        box-shadow: 0 16px 32px rgba(3, 40, 56, 0.25);
+      }
+
+      [data-theme="dark"] .nav-links {
+        background: rgba(3, 58, 80, 0.98);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 12px 0;
+        font-size: 17px;
+        border-bottom: 1px solid rgba(252, 255, 255, 0.15);
+      }
+
+      .nav-links a:last-child {
+        border-bottom: 0;
       }
 
       .facts {
@@ -1186,7 +1273,7 @@
         display: none;
       }
 
-      .reveal {
+      .js .reveal {
         opacity: 1;
         transform: none;
       }
@@ -1198,7 +1285,7 @@
         transition: none !important;
       }
 
-      .reveal {
+      .js .reveal {
         opacity: 1;
         transform: none;
       }
@@ -1219,10 +1306,20 @@
     <div class="wrap">
       <a class="brand" href="#top"><span class="logo">MK</span><span class="full">Metehan Karadeniz</span></a>
       <nav class="nav" aria-label="Main">
-        <a class="nav-link" href="#about">About</a>
-        <a class="nav-link" href="#skills">Skills</a>
-        <a class="nav-link" href="#projects">Projects</a>
-        <a class="nav-link" href="#contact">Contact</a>
+        <div class="nav-links" id="nav-links">
+          <a class="nav-link" href="#about">About</a>
+          <a class="nav-link" href="#skills">Skills</a>
+          <a class="nav-link" href="#projects">Projects</a>
+          <a class="nav-link" href="#contact">Contact</a>
+        </div>
+        <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+          <svg class="icon-menu" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
         <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" title="Dark mode">
           <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a8.5 8.5 0 1 0 11.5 11.5z" />
@@ -1411,8 +1508,8 @@
 
   <footer>
     <div class="wrap">
-      <span>&copy; 2026 Metehan Karadeniz</span>
-      <span>Prefer something less serious? <a href="fun.html">Visit the fun version &#9733;</a></span>
+      <span>&copy; <span id="year">2026</span> Metehan Karadeniz</span>
+      <span>Ankara, Türkiye</span>
     </div>
   </footer>
 
@@ -1453,6 +1550,40 @@
       syncThemeButton();
     });
     syncThemeButton();
+
+    // until the visitor picks a theme with the toggle, follow changes to the device setting
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    systemDark.addEventListener('change', e => {
+      let saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (err) { }
+      if (saved !== null) return;
+      if (e.matches) {
+        document.documentElement.dataset.theme = 'dark';
+      } else {
+        delete document.documentElement.dataset.theme;
+      }
+      syncThemeButton();
+    });
+
+    // mobile menu: open/close with the button, close after picking a section or pressing Escape
+    const menuBtn = document.querySelector('.menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    const setMenu = open => {
+      navLinks.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+    };
+    menuBtn.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+    navLinks.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+        setMenu(false);
+        menuBtn.focus();
+      }
+    });
+
+    // keep the copyright year current
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
 </body>

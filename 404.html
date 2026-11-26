@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (e) { }
+      var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (saved === null && systemDark)) document.documentElement.dataset.theme = 'dark';
+    })();
+  </script>
+  <title>Page not found | Metehan Karadeniz</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,500&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="512x512" href="/mk-icon.png">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    :root {
+      color-scheme: light;
+      --blue: #0593C6;
+      --pink: #D83995;
+      --white: #FCFFFF;
+      --pink-soft: #ffc2e3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: #fff;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      background: linear-gradient(150deg, #2cb2e2 0%, var(--blue) 55%, #0489b9 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    [data-theme="dark"] body {
+      color-scheme: dark;
+      background: linear-gradient(150deg, #0479a3 0%, #045d80 55%, #033f57 100%);
+    }
+
+    main {
+      max-width: 560px;
+      text-align: center;
+    }
+
+    .code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .9;
+    }
+
+    h1 {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(64px, 16vw, 140px);
+      line-height: 1;
+      margin: 10px 0 8px;
+      letter-spacing: -0.02em;
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 500;
+      color: var(--pink-soft);
+    }
+
+    p {
+      margin: 0 0 28px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: var(--white);
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--pink), #c22a83);
+      box-shadow: 0 8px 24px rgba(216, 57, 149, 0.4);
+      transition: transform .15s ease;
+    }
+
+    a:hover {
+      transform: translateY(-2px);
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="code">Error 404</div>
+    <h1>4<em>0</em>4</h1>
+    <p>This page doesn't exist. It may have moved, or the link has a typo.</p>
+    <a href="/">&larr; Back to the homepage</a>
+  </main>
+</body>
+
+</html>
