@@ -1071,6 +1071,11 @@
       box-shadow: 0 14px 28px rgba(3, 40, 56, 0.2);
     }
 
+    /* the main-page screenshot spans the full width above the other two */
+    .shot-wide {
+      grid-column: 1 / -1;
+    }
+
     .shot img {
       display: block;
       width: 100%;
@@ -1523,15 +1528,20 @@
               </div>
             </summary>
             <div class="shots">
+              <a class="shot shot-wide" href="crescendo-home.jpg" target="_blank" rel="noopener">
+                <img src="crescendo-home.jpg" width="1440" height="900" loading="lazy"
+                  alt="Crescendo main page: album search with a sample track-by-track rating card and taste match">
+                <span class="shot-cap">Main page</span>
+              </a>
               <a class="shot" href="crescendo-eminem-show.jpg" target="_blank" rel="noopener">
                 <img src="crescendo-eminem-show.jpg" width="1440" height="900" loading="lazy"
                   alt="Crescendo album page for The Eminem Show: community average, the user's album rating and per-track star ratings">
                 <span class="shot-cap">Album page &middot; The Eminem Show</span>
               </a>
-              <a class="shot" href="crescendo-graduation.jpg" target="_blank" rel="noopener">
-                <img src="crescendo-graduation.jpg" width="1440" height="900" loading="lazy"
-                  alt="Crescendo album page for Graduation: genre tags, ratings and the track-by-track rating list">
-                <span class="shot-cap">Album page &middot; Graduation</span>
+              <a class="shot" href="crescendo-graduation-reviews.jpg" target="_blank" rel="noopener">
+                <img src="crescendo-graduation-reviews.jpg" width="1440" height="900" loading="lazy"
+                  alt="Crescendo reviews for Graduation: listeners' written reviews with star ratings, and a box to write your own">
+                <span class="shot-cap">Reviews &middot; Graduation</span>
               </a>
             </div>
             <div class="versions">
