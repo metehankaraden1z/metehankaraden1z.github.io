@@ -1041,8 +1041,58 @@
     }
 
 
+    /* the opened card widens so the screenshots are readable */
+    .projects:has(> .project[open]:only-child) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 0 24px 16px;
+      animation: versions-in .25s ease;
+    }
+
+    .shot {
+      display: block;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #14110d;
+      color: var(--text);
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .shot:hover,
+    .shot:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(3, 40, 56, 0.2);
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .shot-cap {
+      display: block;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+    }
+
     @media (max-width: 520px) {
-      .versions {
+
+      .versions,
+      .shots {
         grid-template-columns: 1fr;
       }
     }
@@ -1050,7 +1100,8 @@
     @media (prefers-reduced-motion: reduce) {
 
       .wip::before,
-      .versions {
+      .versions,
+      .shots {
         animation: none;
       }
     }
@@ -1413,8 +1464,7 @@
         <div class="edu">
           <div class="row">
             <h3>Bilkent University</h3>
-            <!-- Add your expected graduation year, e.g. "Expected 2029" -->
-            <span class="pill">In progress</span>
+            <span class="pill">Expected 2029</span>
           </div>
           <p class="muted" style="margin:6px 0 0;">Department of Computer Science &middot; Ankara, Türkiye</p>
         </div>
@@ -1467,11 +1517,23 @@
                 <p>A track-by-track music rating app: search any album, rate it song by song, and watch your taste
                   profile build itself.</p>
                 <span class="repo">
-                  <span class="when-closed">Choose a version</span><span class="when-open">Hide versions</span>
+                  <span class="when-closed">See screenshots &amp; versions</span><span class="when-open">Hide details</span>
                   <span class="chev" aria-hidden="true">&#8964;</span>
                 </span>
               </div>
             </summary>
+            <div class="shots">
+              <a class="shot" href="crescendo-eminem-show.jpg" target="_blank" rel="noopener">
+                <img src="crescendo-eminem-show.jpg" width="1440" height="900" loading="lazy"
+                  alt="Crescendo album page for The Eminem Show: community average, the user's album rating and per-track star ratings">
+                <span class="shot-cap">Album page &middot; The Eminem Show</span>
+              </a>
+              <a class="shot" href="crescendo-graduation.jpg" target="_blank" rel="noopener">
+                <img src="crescendo-graduation.jpg" width="1440" height="900" loading="lazy"
+                  alt="Crescendo album page for Graduation: genre tags, ratings and the track-by-track rating list">
+                <span class="shot-cap">Album page &middot; Graduation</span>
+              </a>
+            </div>
             <div class="versions">
               <a class="version" href="https://github.com/metehankaraden1z/crescendo-web" target="_blank" rel="noopener">
                 <span class="v-name">Web</span>
