@@ -254,6 +254,10 @@
       height: 100%;
     }
 
+    .intro-notch {
+      fill: var(--cobalt);
+    }
+
     .intro-m {
       animation: intro-from-left 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms backwards;
     }
@@ -813,10 +817,10 @@
       }
     }
   </style>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
-  <link rel="icon" type="image/png" sizes="512x512" href="mk-icon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico?v=2" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" sizes="512x512" href="mk-icon.png?v=2">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 </head>
 
 <body>
@@ -827,13 +831,15 @@
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" /></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6" /></symbol>
     <symbol id="mk-m" viewBox="0 0 1080 1080"><path fill="currentColor" d="M186.375 562 L186.375 218 L340.375 218 L371.875 339 C373.208 343.333 375.125 350.5 377.625 360.5 C380.125 370.5 382.792 381.333 385.625 393 C388.458 404.667 391.042 415.5 393.375 425.5 L397.375 425.5 C399.042 418.167 401.125 409.417 403.625 399.25 C406.125 389.083 408.708 378.667 411.375 368 C414.042 357.333 416.375 347.667 418.375 339 L449.875 218 L598.375 218 L598.375 498 L501.125 498 L501.125 562 L492.875 562 L492.875 438 C492.875 424.667 492.958 410.917 493.125 396.75 C493.292 382.583 493.458 369.167 493.625 356.5 C493.792 343.833 493.875 333.333 493.875 325 L489.875 325 C488.875 331.667 487.458 339.5 485.625 348.5 C483.792 357.5 481.875 366.417 479.875 375.25 C477.875 384.083 475.875 391.833 473.875 398.5 L429.375 562 L346.875 562 L301.875 398.5 C300.208 391.833 298.292 384.083 296.125 375.25 C293.958 366.417 292.042 357.5 290.375 348.5 C288.708 339.5 287.208 331.833 285.875 325.5 L281.875 325.5 C282.208 333.833 282.542 344.333 282.875 357 C283.208 369.667 283.458 383 283.625 397 C283.792 411 283.875 424.667 283.875 438 L283.875 562 Z" /></symbol>
+    <symbol id="mk-m-full" viewBox="0 0 1080 1080"><path fill="currentColor" d="M186.375 562 L186.375 218 L340.375 218 L371.875 339 C373.208 343.333 375.125 350.5 377.625 360.5 C380.125 370.5 382.792 381.333 385.625 393 C388.458 404.667 391.042 415.5 393.375 425.5 L397.375 425.5 C399.042 418.167 401.125 409.417 403.625 399.25 C406.125 389.083 408.708 378.667 411.375 368 C414.042 357.333 416.375 347.667 418.375 339 L449.875 218 L598.375 218 L598.375 562 L492.875 562 L492.875 438 C492.875 424.667 492.958 410.917 493.125 396.75 C493.292 382.583 493.458 369.167 493.625 356.5 C493.792 343.833 493.875 333.333 493.875 325 L489.875 325 C488.875 331.667 487.458 339.5 485.625 348.5 C483.792 357.5 481.875 366.417 479.875 375.25 C477.875 384.083 475.875 391.833 473.875 398.5 L429.375 562 L346.875 562 L301.875 398.5 C300.208 391.833 298.292 384.083 296.125 375.25 C293.958 366.417 292.042 357.5 290.375 348.5 C288.708 339.5 287.208 331.833 285.875 325.5 L281.875 325.5 C282.208 333.833 282.542 344.333 282.875 357 C283.208 369.667 283.458 383 283.625 397 C283.792 411 283.875 424.667 283.875 438 L283.875 562 Z" /></symbol>
     <symbol id="mk-k" viewBox="0 0 1080 1080"><polygon fill="currentColor" points="521.125,862 521.125,518 631.625,518 631.625,665 754.125,518 891.125,518 767.625,659.5 893.625,862 763.125,862 690.125,733.5 631.625,790 631.625,862" /></symbol>
   </svg>
 
   <!-- intro: M comes in from the left, K from the right, until the K's corner locks into the M's notch -->
   <div class="intro" aria-hidden="true">
     <div class="intro-mark">
-      <svg class="intro-m" viewBox="0 0 1080 1080"><use href="#mk-m" /></svg>
+      <svg class="intro-m" viewBox="0 0 1080 1080"><use href="#mk-m-full" />
+        <rect class="intro-notch" x="598.375" y="498" width="0" height="64.5" /></svg>
       <svg class="intro-k" viewBox="0 0 1080 1080"><use href="#mk-k" /></svg>
     </div>
   </div>
@@ -1030,6 +1036,21 @@
       intro.addEventListener('click', endIntro);
       addEventListener('keydown', endIntro, { once: true });
       setTimeout(endIntro, 2600); // never stay over the page, whatever happens to the animation
+
+      // The M arrives whole. As the K's top-left corner pushes in, the notch is cut out of the M right in
+      // front of it (keeping the drawing's 20-unit gap), so the notch exists only once the K reaches it.
+      const mark = intro.querySelector('.intro-mark');
+      const kEl = intro.querySelector('.intro-k');
+      const notch = intro.querySelector('.intro-notch');
+      const carve = () => {
+        if (!root.classList.contains('intro-on')) return;
+        const shift = new DOMMatrix(getComputedStyle(kEl).transform).m41 * 1080 / mark.clientWidth;
+        const left = Math.min(598.375, Math.max(501.125, 521.125 + shift - 20));
+        notch.setAttribute('x', left);
+        notch.setAttribute('width', 598.375 - left);
+        requestAnimationFrame(carve);
+      };
+      requestAnimationFrame(carve);
     }
   </script>
 
