@@ -5,25 +5,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // mark that JS runs, so the scroll-in animation only hides content when it can reveal it again
-    document.documentElement.classList.add('js');
-    // apply the light/dark theme before the page paints, so there is no flash:
-    // a choice saved with the toggle wins, otherwise follow the device setting
+    // Apply the theme before first paint (no flash). The sleeve is printed on deep ink by default;
+    // the paper (light) version is an explicit choice the visitor makes with the toggle.
     (function () {
       var saved = null;
       try { saved = localStorage.getItem('theme'); } catch (e) { }
-      var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (saved === null && systemDark)) document.documentElement.dataset.theme = 'dark';
+      if (saved !== 'light') document.documentElement.dataset.theme = 'dark';
     })();
   </script>
   <title>Metehan Karadeniz | Computer Science Student</title>
   <meta name="description"
-    content="Metehan Karadeniz is a Computer Science student at Bilkent University in Ankara, working with Java, Python and C++.">
+    content="Metehan Karadeniz is a Computer Science student at Bilkent University in Ankara, building Crescendo, a track-by-track music rating app, in Python and Flutter.">
   <meta property="og:title" content="Metehan Karadeniz | Computer Science Student">
   <meta property="og:site_name" content="Metehan Karadeniz">
   <meta name="application-name" content="Metehan Karadeniz">
   <meta property="og:description"
-    content="Computer Science student at Bilkent University. Projects, skills and contact details.">
+    content="Computer Science student at Bilkent University. Crescendo, skills and contact details.">
   <meta property="og:type" content="profile">
   <meta property="og:image" content="https://metehankaradeniz.com/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -31,12 +28,12 @@
   <meta property="og:image:alt" content="Metehan Karadeniz, Computer Science student at Bilkent University">
   <meta property="og:url" content="https://metehankaradeniz.com/">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0593C6">
+  <meta name="theme-color" content="#2338A8">
   <link rel="canonical" href="https://metehankaradeniz.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500;1,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"
     rel="stylesheet">
   <script type="application/ld+json">
 {
@@ -58,7 +55,7 @@
   "jobTitle": "Computer Science Student",
   "affiliation": { "@type": "CollegeOrUniversity", "name": "Bilkent University" },
   "address": { "@type": "PostalAddress", "addressLocality": "Ankara", "addressCountry": "TR" },
-  "knowsAbout": ["Java", "Python", "C++", "Object-oriented programming"],
+  "knowsAbout": ["Python", "Java", "C++", "Flutter", "SQLite"],
   "sameAs": [
     "https://www.linkedin.com/in/metehan-karadeniz-0649ba381/",
     "https://github.com/metehankaraden1z"
@@ -66,129 +63,44 @@
 }
 </script>
   <style>
+    /* ------------------------------------------------------------------
+       Liner notes: the page is set like the back of a record sleeve.
+       Two inks: cobalt printed as whole fields, blue-black ink on paper.
+       ------------------------------------------------------------------ */
     :root {
       color-scheme: light;
-      /* palette: blue leads, near-white is the base, pink marks buttons and details */
-      --blue: #0593C6;
-      --white: #FCFFFF;
-      --pink: #D83995;
-      --blue-deep: #046c92;
-      --blue-ink: #04729a; /* blue for small text on light backgrounds */
-      --pink-soft: #ffc2e3;
-      --cyan: #e0f5fb; /* light cyan page background */
-      --cyan-soft: #f2fbfe; /* cards on the cyan background */
-      --ink: #06283a;
-      --bg: var(--cyan);
-      --surface: var(--cyan-soft);
-      --text: #0b2a38;
-      --muted: #4d6a78;
-      --line: #bfe2ec;
-      --shadow: 0 2px 4px rgba(3, 40, 56, 0.04), 0 12px 32px rgba(5, 147, 198, 0.1);
+      --cobalt: #2338A8;
+      --cobalt-deep: #1A2A86;
+      --press: #0E1230;
+      /* fixed blue-black for pressed/hover fills, same in both themes */
+      --on-cobalt: #F6F7FF;
+      --on-cobalt-2: #C9D1FF;
+      /* secondary text on cobalt, 6.4:1 */
+      --paper: #FAFAF7;
+      --ink: #0E1230;
+      --ink-2: #454B6E;
+      /* secondary text on paper, 8.1:1 */
+      --rule: #CDD0DE;
+      --link: #2338A8;
+      --ground: var(--paper);
+      --text: var(--ink);
+      --text-2: var(--ink-2);
+      --measure: 66ch;
+      --pad: clamp(20px, 5vw, 64px);
+      --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
     }
 
-    /* dark mode, switched with the button in the top bar */
     :root[data-theme="dark"] {
       color-scheme: dark;
-      --bg: #03161f;
-      --surface: #0a2533;
-      --text: var(--white);
-      --muted: #9cbccb;
-      --line: #163f52;
-      --blue-ink: #5cc8ef;
-      --shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+      --paper: #0A0E2A;
+      --ink: #ECEEFA;
+      --ink-2: #AEB5D6;
+      --rule: #2A3160;
+      --link: #AEBBFF;
+      --ground: var(--paper);
+      --text: var(--ink);
+      --text-2: var(--ink-2);
     }
-
-    [data-theme="dark"] .topbar {
-      background: rgba(3, 58, 80, 0.95);
-      border-bottom-color: rgba(252, 255, 255, 0.1);
-    }
-
-    [data-theme="dark"] .hero,
-    [data-theme="dark"] .contact-card {
-      background: linear-gradient(150deg, #0479a3 0%, #045d80 55%, #033f57 100%);
-    }
-
-    [data-theme="dark"] .ticker {
-      background: var(--blue-deep);
-    }
-
-    [data-theme="dark"] .fact b {
-      color: #5cc8ef;
-    }
-
-    /* brighter pink so small pink text stays readable on dark backgrounds */
-    [data-theme="dark"] .pill,
-    [data-theme="dark"] .wip {
-      color: #ff9fd2;
-    }
-
-    [data-theme="dark"] .card .repo,
-    [data-theme="dark"] .version .arr {
-      color: #ff8cc8;
-    }
-
-    [data-theme="dark"] .card:hover {
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
-    }
-
-    body {
-      transition: background-color .3s ease, color .3s ease;
-    }
-
-    .theme-toggle {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      border-radius: 50%;
-      border: 1px solid rgba(252, 255, 255, 0.35);
-      background: rgba(252, 255, 255, 0.12);
-      color: var(--white);
-      cursor: pointer;
-      transition: background .15s ease, transform .2s ease;
-    }
-
-    .theme-toggle:hover {
-      background: rgba(252, 255, 255, 0.24);
-      transform: rotate(-15deg);
-    }
-
-    .theme-toggle:focus-visible {
-      outline: 2px solid var(--white);
-      outline-offset: 3px;
-    }
-
-    .theme-toggle svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .theme-toggle .icon-moon {
-      fill: currentColor;
-    }
-
-    .theme-toggle .icon-sun {
-      display: none;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-    }
-
-    .theme-toggle .icon-sun circle {
-      fill: currentColor;
-      stroke: none;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-moon {
-      display: none;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-sun {
-      display: block;
-    }
-
 
     * {
       box-sizing: border-box;
@@ -196,1230 +108,638 @@
 
     html {
       scroll-behavior: smooth;
+      scrollbar-color: var(--cobalt) var(--ground);
     }
 
     body {
       margin: 0;
-      background: var(--bg);
+      background: var(--ground);
       color: var(--text);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-      font-size: 17px;
-      line-height: 1.65;
+      font-family: var(--font);
+      font-size: 18px;
+      line-height: 1.6;
+      font-variation-settings: "wdth" 100;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      caret-color: var(--cobalt);
+    }
+
+    ::selection {
+      background: var(--cobalt);
+      color: var(--on-cobalt);
     }
 
     a {
-      color: var(--blue-ink);
+      color: var(--link);
+      text-decoration-thickness: 1px;
       text-underline-offset: 3px;
     }
 
-
-    .wrap {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 0 24px;
+    a:hover {
+      text-decoration-thickness: 2px;
     }
 
-    h1,
-    h2,
-    h3 {
-      font-family: 'Fraunces', Georgia, serif;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-    }
-
-    .mono {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 13px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-
-    /* ---------- top bar (sits on the dark hero) ---------- */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(5, 147, 198, 0.94);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(252, 255, 255, 0.25);
-    }
-
-    .topbar .wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      height: 64px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      color: #fff;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .brand .logo {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      font-family: 'Fraunces', serif;
-      font-size: 15px;
-      color: var(--white);
-      background: linear-gradient(135deg, #ee6cb5, var(--pink));
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      font-size: 15px;
-    }
-
-    .nav a {
-      color: rgba(252, 255, 255, 0.9);
-      text-decoration: none;
-      transition: color .15s ease;
-    }
-
-    .nav a:hover {
-      color: #fff;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    /* menu button, only shown on small screens */
-    .menu-toggle {
-      display: none;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      padding: 0;
-      border-radius: 50%;
-      border: 1px solid rgba(252, 255, 255, 0.35);
-      background: rgba(252, 255, 255, 0.12);
-      color: var(--white);
-      cursor: pointer;
-    }
-
-    .menu-toggle:focus-visible {
-      outline: 2px solid var(--white);
+    :focus-visible {
+      outline: 2px solid currentColor;
       outline-offset: 3px;
     }
 
-    .menu-toggle svg {
-      width: 18px;
-      height: 18px;
+    .front :focus-visible,
+    .contact :focus-visible {
+      outline-color: var(--on-cobalt);
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    .skip {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .skip:focus {
+      left: 12px;
+      top: 12px;
+      z-index: 10;
+      background: var(--paper);
+      color: var(--ink);
+      padding: 8px 12px;
+    }
+
+    svg.icon {
+      width: 1em;
+      height: 1em;
+      flex: none;
+      fill: none;
       stroke: currentColor;
       stroke-width: 2;
       stroke-linecap: round;
-      fill: none;
+      stroke-linejoin: round;
     }
 
-    .menu-toggle .icon-close,
-    .menu-toggle[aria-expanded="true"] .icon-menu {
+    /* ---------- front of the sleeve: one cobalt field ---------- */
+    .front {
+      background: var(--cobalt);
+      color: var(--on-cobalt);
+    }
+
+    .front a {
+      color: var(--on-cobalt);
+    }
+
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      font-size: 15px;
+      border-bottom: 1px solid rgba(246, 247, 255, 0.28);
+    }
+
+    .bar .site {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 14px;
+      font: inherit;
+      font-size: 15px;
+      color: var(--on-cobalt);
+      background: transparent;
+      border: 1px solid rgba(246, 247, 255, 0.5);
+      border-radius: 0;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--on-cobalt);
+      color: var(--cobalt);
+    }
+
+    .theme-toggle .when-dark,
+    [data-theme="dark"] .theme-toggle .when-light {
       display: none;
     }
 
-    .menu-toggle[aria-expanded="true"] .icon-close {
-      display: block;
+    [data-theme="dark"] .theme-toggle .when-dark {
+      display: inline;
     }
 
-    /* ---------- hero ---------- */
-    .hero {
-      position: relative;
-      color: #fff;
-      background: linear-gradient(150deg, #2cb2e2 0%, var(--blue) 55%, #0489b9 100%);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .hero::before {
-      /* soft colour mesh */
-      content: "";
-      position: absolute;
-      inset: -20%;
-      z-index: -2;
-      background:
-        radial-gradient(40% 50% at 78% 30%, rgba(252, 255, 255, 0.28), transparent 70%),
-        radial-gradient(35% 45% at 92% 85%, rgba(216, 57, 149, 0.38), transparent 70%),
-        radial-gradient(30% 40% at 10% 90%, rgba(252, 255, 255, 0.2), transparent 70%);
-      animation: mesh 18s ease-in-out infinite alternate;
-    }
-
-    .hero::after {
-      /* dot grid */
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
-      background-size: 22px 22px;
-      mask-image: linear-gradient(180deg, #000 0%, transparent 95%);
-      -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 95%);
-    }
-
-    @keyframes mesh {
-      to {
-        transform: translate(-4%, 3%) rotate(4deg);
-      }
-    }
-
-    .hero .wrap {
+    .cover {
       display: grid;
-      grid-template-columns: 1.25fr 1fr;
-      align-items: center;
-      gap: 48px;
-      padding-top: 84px;
-      padding-bottom: 96px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: clamp(28px, 5vw, 72px);
+      align-items: end;
+      padding-top: clamp(32px, 4.5vw, 56px);
+      padding-bottom: clamp(24px, 3.5vw, 40px);
     }
 
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--white);
-      margin-bottom: 22px;
+    h1 {
+      margin: 0;
+      font-size: clamp(56px, 11vw, 96px);
+      line-height: 0.86;
+      font-weight: 900;
+      font-variation-settings: "wdth" 62;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
     }
 
-    .kicker::before {
-      content: "";
-      width: 28px;
-      height: 2px;
-      background: var(--pink);
-    }
-
-    .hero h1 {
-      text-shadow: 0 2px 12px rgba(3, 60, 84, 0.18);
-      font-size: clamp(48px, 8vw, 92px);
-      margin: 0 0 22px;
-      font-weight: 700;
-    }
-
-    .hero h1 em {
+    h1 span {
       display: block;
-      font-style: italic;
-      font-weight: 500;
-      background: linear-gradient(90deg, var(--white) 0%, var(--pink-soft) 60%, #ff9fd2 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      padding-bottom: .08em;
     }
 
-    .hero .role {
-      font-size: 20px;
-      color: var(--white);
-      max-width: 520px;
-      text-shadow: 0 1px 2px rgba(3, 60, 84, 0.3);
-      margin: 0 0 30px;
-    }
-
-    .hero .role strong {
-      color: #fff;
-      font-weight: 600;
+    .descriptor {
+      margin: 22px 0 0;
+      max-width: 34ch;
+      font-size: clamp(18px, 2vw, 21px);
+      line-height: 1.45;
+      color: var(--on-cobalt);
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
+      margin-top: 26px;
     }
 
-    .btn {
+    .act {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
+      min-height: 46px;
+      padding: 0 18px;
+      font-size: 16px;
+      font-weight: 700;
       text-decoration: none;
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      background: rgba(255, 255, 255, 0.06);
-      transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+      border: 1.5px solid var(--on-cobalt);
+      transition: background-color .15s ease-out, color .15s ease-out;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.12);
+    .act.primary {
+      background: var(--on-cobalt);
+      color: var(--cobalt);
     }
 
-    .btn-primary {
-      color: var(--white);
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--pink), #c22a83);
-      box-shadow: 0 8px 24px rgba(216, 57, 149, 0.4);
+    .front .act.primary {
+      color: var(--cobalt);
     }
 
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #e04da3, var(--pink));
-      box-shadow: 0 12px 30px rgba(216, 57, 149, 0.55);
+    .act:hover {
+      background: var(--press);
+      border-color: var(--press);
+      color: var(--on-cobalt);
     }
 
-    /* "Download CV" button: opens a small menu to pick English or Turkish */
-    .cv-menu {
-      position: relative;
+    .front .act:hover {
+      color: var(--on-cobalt);
     }
 
-    .cv-menu > summary {
-      list-style: none;
-      cursor: pointer;
-    }
-
-    .cv-menu > summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .cv-menu > summary:focus-visible {
-      outline: 2px solid var(--white);
-      outline-offset: 3px;
-    }
-
-    .cv-menu[open] > summary {
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    /* opens upward: below the button the hero ends and the skills ticker would cover it */
-    .cv-options {
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 0;
-      z-index: 5;
-      min-width: 180px;
-      padding: 6px;
-      border-radius: 12px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: 0 -12px 36px rgba(3, 40, 56, 0.28);
-      animation: cv-up .2s ease;
-    }
-
-    @keyframes cv-up {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-    }
-
-    .cv-options a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .cv-options a:hover,
-    .cv-options a:focus-visible {
-      background: color-mix(in srgb, var(--blue) 12%, transparent);
-      outline: none;
-    }
-
-    .cv-code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 6px;
-      color: var(--white);
-      background: var(--pink);
-    }
-
-    .btn svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    /* photo with offset colour blocks and a rotating badge */
     .portrait {
       position: relative;
-      justify-self: center;
-      width: min(360px, 80vw);
-      aspect-ratio: 4 / 5;
-    }
-
-    .portrait .block {
-      position: absolute;
-      border-radius: 28px;
-    }
-
-    .portrait .block-a {
-      inset: 0;
-      transform: translate(22px, 22px) rotate(4deg);
-      background: linear-gradient(135deg, var(--pink), #f07ab9);
-    }
-
-    .portrait .block-b {
-      inset: 0;
-      transform: translate(-16px, -16px) rotate(-3deg);
-      border: 2px solid rgba(252, 255, 255, 0.75);
+      width: clamp(200px, min(26vw, 34vh), 340px);
+      aspect-ratio: 1;
+      margin: 0;
+      background: var(--cobalt-deep);
+      overflow: hidden;
     }
 
     .portrait img {
-      position: relative;
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% 30%;
-      border-radius: 28px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+      object-position: 50% 28%;
     }
 
-    .badge {
+    .portrait figcaption {
       position: absolute;
-      left: -46px;
-      bottom: -34px;
-      width: 132px;
-      height: 132px;
-      border-radius: 50%;
-      background: var(--cyan);
-      color: var(--blue-deep);
+      left: 0;
+      bottom: 0;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: var(--cobalt);
+      color: var(--on-cobalt-2);
+    }
+
+    /* ---------- tracklist: the table of contents ---------- */
+    .tracklist {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 clamp(28px, 4vw, 48px);
+      border-top: 1px solid rgba(246, 247, 255, 0.28);
+      counter-reset: none;
+    }
+
+    .tracklist a {
       display: grid;
-      place-items: center;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      grid-template-columns: 3.2em auto minmax(24px, 1fr) auto;
+      align-items: baseline;
+      gap: 14px;
+      padding: 11px 0;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(246, 247, 255, 0.28);
+      font-size: clamp(18px, 2.2vw, 24px);
+      transition: background-color .15s ease-out, color .15s ease-out, box-shadow .15s ease-out;
     }
 
-    .badge svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      animation: spin 16s linear infinite;
+    .tracklist .pos {
+      font-variant-numeric: tabular-nums;
+      color: var(--on-cobalt-2);
+      font-size: 0.8em;
     }
 
-    .badge text {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 1.35px;
-      fill: var(--blue-deep);
-    }
-
-    .badge .core {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: var(--blue);
-      display: grid;
-      place-items: center;
-    }
-
-    .badge .core::after {
-      content: "";
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--pink);
-      box-shadow: 0 0 0 5px rgba(216, 57, 149, 0.3);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes pulse {
-      50% {
-        box-shadow: 0 0 0 9px rgba(216, 57, 149, 0);
-      }
-    }
-
-    /* ---------- skills ticker ---------- */
-    .ticker {
-      background: var(--blue);
-      color: var(--white);
-      overflow: hidden;
-      white-space: nowrap;
-      border-block: 2px solid var(--white);
-      transform: rotate(-1.2deg);
-      margin: -18px -10px 0;
-      position: relative;
-      z-index: 2;
-    }
-
-    .ticker-track {
-      display: inline-flex;
-      gap: 34px;
-      padding: 14px 0;
-      animation: tick 30s linear infinite;
-      font-family: 'Fraunces', serif;
-      font-size: 22px;
-      font-style: italic;
-      font-weight: 500;
-    }
-
-    .ticker-track span::after {
-      content: "✦";
-      font-style: normal;
-      margin-left: 34px;
-      color: var(--pink-soft);
-    }
-
-    @keyframes tick {
-      to {
-        transform: translateX(-50%);
-      }
-    }
-
-    /* ---------- sections ---------- */
-    section {
-      padding: 88px 0 24px;
-      scroll-margin-top: 64px;
-    }
-
-    .sec {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 40px;
-    }
-
-    .sec-label {
-      position: sticky;
-      top: 96px;
-      align-self: start;
-    }
-
-    .sec-label .num {
-      display: block;
-      font-family: 'Fraunces', serif;
-      font-size: 64px;
+    .tracklist .title {
       font-weight: 700;
+      font-variation-settings: "wdth" 80;
+    }
+
+    .tracklist .lead {
+      border-bottom: 2px dotted rgba(246, 247, 255, 0.45);
+      transform: translateY(-0.3em);
+    }
+
+    .tracklist .note {
+      color: var(--on-cobalt-2);
+      font-size: 0.75em;
+      text-align: right;
+    }
+
+    .tracklist a:hover,
+    .tracklist a:focus-visible {
+      background: var(--on-cobalt);
+      box-shadow: -10px 0 0 var(--on-cobalt), 10px 0 0 var(--on-cobalt);
+      color: var(--cobalt);
+      outline: none;
+    }
+
+    .tracklist a:hover .pos,
+    .tracklist a:hover .note,
+    .tracklist a:focus-visible .pos,
+    .tracklist a:focus-visible .note {
+      color: var(--cobalt);
+    }
+
+    .tracklist a:hover .lead,
+    .tracklist a:focus-visible .lead {
+      border-bottom-color: var(--cobalt);
+    }
+
+    /* ---------- inner pages ---------- */
+    main section {
+      padding: clamp(56px, 8vw, 104px) 0 0;
+      scroll-margin-top: 12px;
+    }
+
+    h2 {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin: 0 0 28px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--text);
+      font-size: clamp(34px, 5vw, 56px);
       line-height: 1;
-      background: linear-gradient(135deg, var(--blue), var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      font-weight: 900;
+      font-variation-settings: "wdth" 66;
+      text-transform: uppercase;
+      letter-spacing: -0.005em;
     }
 
-    .sec-label .mono {
-      color: var(--muted);
+    h2 .pos {
+      font-size: 0.42em;
+      font-weight: 600;
+      font-variation-settings: "wdth" 100;
+      font-variant-numeric: tabular-nums;
+      color: var(--cobalt);
     }
 
-    section h2 {
-      font-size: clamp(30px, 4vw, 42px);
-      margin: 0 0 22px;
+    [data-theme="dark"] h2 .pos {
+      color: var(--link);
     }
 
-    section h2 em {
-      font-style: italic;
-      font-weight: 500;
-      color: var(--pink);
-    }
-
-    section p {
-      margin: 0 0 16px;
-    }
-
-    .lead {
+    h3 {
+      margin: 0 0 8px;
       font-size: 20px;
-      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0 0 16px;
+      max-width: var(--measure);
     }
 
     .muted {
-      color: var(--muted);
+      color: var(--text-2);
     }
 
-    /* quick facts */
-    .facts {
+    /* About */
+    .about-body {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 30px;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: clamp(24px, 4vw, 56px);
     }
 
-    .fact {
-      padding: 18px;
-      border-radius: 16px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
+    .about-body .lede {
+      font-size: clamp(20px, 2.2vw, 24px);
+      line-height: 1.5;
     }
 
-    .fact b {
-      display: block;
-      font-family: 'Fraunces', serif;
-      font-size: 30px;
-      line-height: 1.1;
-      color: var(--blue);
-    }
-
-
-    .fact span {
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    /* education */
-    .edu {
-      position: relative;
-      padding: 26px 28px 26px 34px;
-      border-radius: 18px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .edu::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: linear-gradient(180deg, var(--blue), var(--pink));
-    }
-
-    .edu .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: baseline;
-    }
-
-    .edu h3 {
-      font-size: 24px;
+    .facts-list {
       margin: 0;
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 3px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #a51f6d;
-      background: color-mix(in srgb, var(--pink) 14%, transparent);
-      border: 1px solid color-mix(in srgb, var(--pink) 35%, transparent);
-    }
-
-
-    /* skills */
-    .skills {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .skill-group {
-      padding: 22px;
-      border-radius: 18px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .skill-group h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--muted);
-      margin: 0 0 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .skill-group h3::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      background: var(--c, var(--blue));
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      list-style: none;
       padding: 0;
-      margin: 0;
-    }
-
-    .tags li {
-      font-size: 14px;
-      font-weight: 600;
-      padding: 6px 13px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--c, var(--blue)) 14%, transparent);
-      border: 1px solid color-mix(in srgb, var(--c, var(--blue)) 35%, transparent);
-    }
-
-    /* projects */
-    .projects {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
-
-    .card {
-      display: flex;
-      flex-direction: column;
-      border-radius: 22px;
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      text-decoration: none;
-      color: var(--text);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-6px) rotate(-0.4deg);
-      box-shadow: 0 24px 48px rgba(3, 40, 56, 0.16);
-    }
-
-    .card .cover {
-      position: relative;
-      height: 150px;
-      padding: 18px 22px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      color: #fff;
-      overflow: hidden;
-    }
-
-    .card .cover::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px);
-      background-size: 16px 16px;
-    }
-
-    .cover-1 {
-      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
-    }
-
-    .cover-2 {
-      background: linear-gradient(135deg, var(--blue) 0%, #3fb0dc 50%, var(--pink) 125%);
-    }
-
-    .card .cover .big {
-      position: relative;
-      z-index: 1;
-      font-family: 'Fraunces', serif;
-      font-size: 84px;
-      font-weight: 700;
-      font-style: italic;
-      line-height: .8;
-      opacity: .9;
-    }
-
-    .card .cover .lang {
-      position: relative;
-      z-index: 1;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(3, 40, 56, 0.5);
-    }
-
-    .card .body {
-      padding: 22px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card h3 {
-      font-size: 26px;
-      margin: 0 0 8px;
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 15px;
-      flex: 1;
-    }
-
-    .card .repo {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--pink);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-
-    .card:hover .repo .arr {
-      transform: translate(3px, -3px);
-    }
-
-    .card .repo .arr {
-      transition: transform .2s ease;
-    }
-
-    /* single expandable project: click to choose the web or Android version */
-    .projects:has(> .project:only-child) {
-      grid-template-columns: minmax(0, 580px);
-    }
-
-    .project > summary {
       list-style: none;
-      cursor: pointer;
+      border-top: 1px solid var(--rule);
+      font-size: 16px;
+    }
+
+    .facts-list li {
       display: flex;
-      flex-direction: column;
-      flex: 1;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--rule);
     }
 
-    .project > summary::-webkit-details-marker {
-      display: none;
+    .facts-list span:first-child {
+      color: var(--text-2);
     }
 
-    .project > summary:focus-visible {
-      outline: 3px solid var(--blue);
-      outline-offset: -3px;
-      border-radius: 22px;
+    .facts-list span:last-child {
+      text-align: right;
     }
 
-    .project[open]:hover {
-      transform: none;
+    /* Crescendo */
+    .project-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: clamp(24px, 4vw, 56px);
+      align-items: start;
+      margin-bottom: 32px;
     }
 
-    .wip {
-      align-self: flex-start;
-      display: inline-flex;
+    .project-head .tag {
+      font-size: 15px;
+      color: var(--text-2);
+      margin: 0 0 10px;
+    }
+
+    .repo-links {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--rule);
+    }
+
+    .repo-links a {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      margin: 0 0 12px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: #a51f6d;
-      background: color-mix(in srgb, var(--pink) 12%, transparent);
-      border: 1px solid color-mix(in srgb, var(--pink) 40%, transparent);
-    }
-
-    .wip::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--pink);
-      animation: wip-pulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes wip-pulse {
-      50% {
-        opacity: .35;
-        transform: scale(.7);
-      }
-    }
-
-    .project .repo .chev {
-      display: inline-block;
-      transition: transform .2s ease;
-    }
-
-    .project[open] .repo .chev {
-      transform: rotate(180deg);
-    }
-
-    .project .when-open,
-    .project[open] .when-closed {
-      display: none;
-    }
-
-    .project[open] .when-open {
-      display: inline;
-    }
-
-    .versions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      padding: 0 24px 24px;
-      animation: versions-in .25s ease;
-    }
-
-    @keyframes versions-in {
-      from {
-        opacity: 0;
-        transform: translateY(-6px);
-      }
-    }
-
-    .version {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      row-gap: 2px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--blue) 6%, transparent);
-      color: var(--text);
+      min-height: 56px;
+      padding: 10px 0;
       text-decoration: none;
-      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+      color: var(--text);
+      border-bottom: 1px solid var(--rule);
     }
 
-    .version:hover,
-    .version:focus-visible {
-      border-color: var(--blue);
-      background: color-mix(in srgb, var(--blue) 12%, transparent);
-      transform: translateY(-2px);
-    }
-
-    .version .v-name {
-      font-weight: 700;
-      font-size: 17px;
-    }
-
-    .version .v-desc {
-      grid-column: 1;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .version .arr {
-      grid-row: 1 / span 2;
-      grid-column: 2;
-      align-self: center;
+    .repo-links a b {
       font-size: 18px;
-      color: var(--pink);
     }
 
+    .repo-links a span {
+      font-size: 15px;
+      color: var(--text-2);
+    }
 
-    /* the opened card widens so the screenshots are readable */
-    .projects:has(> .project[open]:only-child) {
-      grid-template-columns: minmax(0, 1fr);
+    .repo-links a .icon {
+      color: var(--link);
+      font-size: 20px;
+      transition: transform .15s ease-out;
+    }
+
+    .repo-links a:hover .icon {
+      transform: translate(2px, -2px);
     }
 
     .shots {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      padding: 0 24px 16px;
-      animation: versions-in .25s ease;
+      gap: 18px;
+      margin: 0;
     }
 
-    .shot {
-      display: block;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      background: #14110d;
-      color: var(--text);
-      text-decoration: none;
-      transition: transform .2s ease, box-shadow .2s ease;
+    .shots figure {
+      margin: 0;
     }
 
-    .shot:hover,
-    .shot:focus-visible {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 28px rgba(3, 40, 56, 0.2);
-    }
-
-    /* the main-page screenshot spans the full width above the other two */
-    .shot-wide {
+    .shots figure:first-child {
       grid-column: 1 / -1;
     }
 
-    .shot img {
+    .shots a {
+      display: block;
+      border: 1px solid var(--rule);
+      background: #14110d;
+    }
+
+    .shots img {
       display: block;
       width: 100%;
       height: auto;
       aspect-ratio: 16 / 10;
       object-fit: cover;
-      object-position: top;
+      object-position: top left;
     }
 
-    .shot-cap {
-      display: block;
-      padding: 8px 12px;
-      font-size: 13px;
-      color: var(--muted);
-      background: var(--surface);
-      border-top: 1px solid var(--line);
-    }
-
-    @media (max-width: 520px) {
-
-      .versions,
-      .shots {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-
-      .wip::before,
-      .versions,
-      .shots {
-        animation: none;
-      }
-    }
-
-    /* contact */
-    .contact-card {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      border-radius: 28px;
-      padding: 56px 48px;
-      color: #fff;
-      background: linear-gradient(150deg, #2cb2e2 0%, var(--blue) 55%, #0489b9 100%);
-    }
-
-    .contact-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(50% 80% at 100% 0%, rgba(252, 255, 255, 0.25), transparent 70%),
-        radial-gradient(40% 70% at 0% 100%, rgba(216, 57, 149, 0.38), transparent 70%);
-    }
-
-    .contact-card h2 {
-      font-size: clamp(34px, 5.5vw, 56px);
-      margin: 0 0 14px;
-      max-width: 640px;
-    }
-
-    .contact-card h2 em {
-      color: var(--pink-soft);
-    }
-
-    .contact-card p {
-      color: var(--white);
-      max-width: 520px;
-      margin-bottom: 28px;
-    }
-
-    .contact-card .email {
-      display: inline-block;
-      font-family: 'Fraunces', serif;
-      font-size: clamp(20px, 3.4vw, 30px);
-      font-style: italic;
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 3px solid var(--pink);
-      padding-bottom: 2px;
-      margin-bottom: 30px;
-      word-break: break-all;
-      transition: border-color .15s ease;
-    }
-
-    .contact-card .email:hover {
-      border-color: var(--white);
-    }
-
-    .contact-card .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 26px;
-      font-size: 15px;
-      color: rgba(252, 255, 255, 0.92);
-    }
-
-    .contact-card .meta a {
-      color: #fff;
-    }
-
-    footer {
-      padding: 40px 0 56px;
+    .shots figcaption {
+      padding-top: 8px;
       font-size: 14px;
-      color: var(--muted);
+      color: var(--text-2);
+    }
+
+    /* Credits */
+    .credits {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 clamp(24px, 4vw, 56px);
+      margin: 0;
+    }
+
+    .credits div {
+      display: grid;
+      grid-template-columns: 9.5em minmax(0, 1fr);
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .credits dt {
+      color: var(--text-2);
+      font-size: 15px;
+      padding-top: 2px;
+    }
+
+    .credits dd {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .credits dd small {
+      font-weight: 400;
+      font-size: 15px;
+      color: var(--text-2);
+    }
+
+    /* Contact: the back cover closes in cobalt again */
+    .contact {
+      margin-top: clamp(64px, 9vw, 120px);
+      background: var(--cobalt);
+      color: var(--on-cobalt);
+    }
+
+    .contact .wrap {
+      padding-top: clamp(48px, 7vw, 88px);
+      padding-bottom: clamp(48px, 7vw, 88px);
+    }
+
+    .contact h2 {
+      border-bottom-color: var(--on-cobalt);
+    }
+
+    .contact h2 .pos {
+      color: var(--on-cobalt-2);
+    }
+
+    .contact p {
+      color: var(--on-cobalt);
+    }
+
+    .contact a {
+      color: var(--on-cobalt);
+    }
+
+    .email {
+      display: inline-block;
+      margin: 8px 0 30px;
+      font-size: clamp(24px, 4.4vw, 48px);
+      font-weight: 800;
+      font-variation-settings: "wdth" 75;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 6px;
+    }
+
+    .contact .act:hover {
+      background: var(--press);
+      border-color: var(--press);
+    }
+
+    /* fine print at the foot of the sleeve */
+    footer {
+      padding: 28px 0 40px;
+      font-size: 14px;
+      color: var(--text-2);
     }
 
     footer .wrap {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px 24px;
     }
 
-    footer a {
-      color: var(--muted);
+    /* one authored moment: the portrait is pulled through the press once, top to bottom.
+       It starts with the top of the photo already printed (a visible state), so a paused
+       animation never hides it; the rest is pulled through top to bottom. */
+    @media (prefers-reduced-motion: no-preference) {
+      .portrait img {
+        animation: print-in 1200ms cubic-bezier(0.16, 1, 0.3, 1) 150ms backwards;
+      }
+
+      @keyframes print-in {
+        from {
+          clip-path: inset(0 0 55% 0);
+        }
+
+        to {
+          clip-path: inset(0 0 0 0);
+        }
+      }
     }
 
-    /* reveal on scroll (only when JS runs; without it everything stays visible) */
-    .js .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .7s ease, transform .7s ease;
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
     }
 
-    .js .reveal.in {
-      opacity: 1;
-      transform: none;
-    }
+    /* ---------- smaller screens ---------- */
+    @media (max-width: 820px) {
 
-    /* ---------- responsive ---------- */
-    @media (max-width: 860px) {
-      .hero .wrap {
-        grid-template-columns: 1fr;
-        padding-top: 56px;
-        padding-bottom: 84px;
-        gap: 56px;
-      }
-
-      .portrait {
-        width: min(300px, 74vw);
-      }
-
-      .badge {
-        left: -24px;
-        width: 108px;
-        height: 108px;
-      }
-
-      .sec {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .sec-label {
-        position: static;
-        display: flex;
-        align-items: baseline;
-        gap: 12px;
-      }
-
-      .sec-label .num {
-        font-size: 40px;
-      }
-
-      .skills,
-      .projects {
-        grid-template-columns: 1fr;
-      }
-
-      section {
-        padding-top: 64px;
+      .about-body,
+      .project-head,
+      .credits {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
     @media (max-width: 640px) {
-      .nav {
+      body {
+        font-size: 17px;
+      }
+
+      .cover {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .portrait {
+        order: -1;
+        width: min(220px, 58vw);
+      }
+
+      .tracklist a {
+        grid-template-columns: 2.6em auto minmax(16px, 1fr) auto;
         gap: 10px;
       }
 
-      .menu-toggle {
-        display: grid;
+      .shots {
+        grid-template-columns: minmax(0, 1fr);
       }
 
-      /* section links drop down under the top bar when the menu button is pressed */
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 64px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        gap: 0;
-        padding: 8px 24px 16px;
-        background: rgba(5, 147, 198, 0.97);
-        border-bottom: 1px solid rgba(252, 255, 255, 0.25);
-        box-shadow: 0 16px 32px rgba(3, 40, 56, 0.25);
-      }
-
-      [data-theme="dark"] .nav-links {
-        background: rgba(3, 58, 80, 0.98);
-      }
-
-      .nav-links.open {
-        display: flex;
-      }
-
-      .nav-links a {
-        padding: 12px 0;
-        font-size: 17px;
-        border-bottom: 1px solid rgba(252, 255, 255, 0.15);
-      }
-
-      .nav-links a:last-child {
-        border-bottom: 0;
-      }
-
-      .facts {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-card {
-        padding: 40px 24px;
-        border-radius: 22px;
-      }
-
-      .ticker-track {
-        font-size: 18px;
+      .credits div {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2px;
       }
     }
 
     @media print {
 
-      .topbar,
-      .ticker,
-      .actions,
-      .badge {
-        display: none !important;
-      }
-
-      .hero,
-      .contact-card {
-        background: #fff !important;
-        color: #000 !important;
-      }
-
-      .hero::before,
-      .hero::after,
-      .contact-card::before {
+      .bar,
+      .theme-toggle,
+      .actions {
         display: none;
       }
 
-      .js .reveal {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
-      }
-
-      .js .reveal {
-        opacity: 1;
-        transform: none;
-      }
-
-      html {
-        scroll-behavior: auto;
+      .front,
+      .contact {
+        background: #fff;
+        color: #000;
       }
     }
   </style>
@@ -1429,331 +749,196 @@
 </head>
 
 <body>
+  <a class="skip" href="#main">Skip to content</a>
 
-  <header class="topbar">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v12M6 11l6 6 6-6M5 20h14" /></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6" /></symbol>
+  </svg>
+
+  <header class="front">
     <div class="wrap">
-      <a class="brand" href="#top"><span class="logo">MK</span><span class="full">Metehan Karadeniz</span></a>
-      <nav class="nav" aria-label="Main">
-        <div class="nav-links" id="nav-links">
-          <a class="nav-link" href="#about">About</a>
-          <a class="nav-link" href="#skills">Skills</a>
-          <a class="nav-link" href="#projects">Projects</a>
-          <a class="nav-link" href="#contact">Contact</a>
+      <div class="bar">
+        <a class="site" href="#top">metehankaradeniz.com</a>
+        <button class="theme-toggle" type="button">
+          <span class="when-light">Ink version</span><span class="when-dark">Paper version</span>
+        </button>
+      </div>
+
+      <div class="cover" id="top">
+        <div>
+          <h1><span>Metehan</span><span>Karadeniz</span></h1>
+          <p class="descriptor">Computer Science student at Bilkent University in Ankara. I write Python and Java,
+            and I'm building Crescendo, a track-by-track music rating app.</p>
+          <div class="actions">
+            <a class="act primary" href="mailto:karadenizmetehan25@gmail.com">
+              <svg class="icon" aria-hidden="true"><use href="#i-mail" /></svg>Email me</a>
+            <a class="act" href="Metehan_Karadeniz_CV_EN.pdf" download>
+              <svg class="icon" aria-hidden="true"><use href="#i-down" /></svg>CV, English</a>
+            <a class="act" href="Metehan_Karadeniz_CV_TR.pdf" download lang="tr" hreflang="tr">
+              <svg class="icon" aria-hidden="true"><use href="#i-down" /></svg>CV, Türkçe</a>
+          </div>
         </div>
-        <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
-          <svg class="icon-menu" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
-          <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 6l12 12M18 6L6 18" />
-          </svg>
-        </button>
-        <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false" title="Dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a8.5 8.5 0 1 0 11.5 11.5z" />
-          </svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.5" />
-            <path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" />
-          </svg>
-        </button>
+        <figure class="portrait">
+          <img src="headshot.jpg" alt="Portrait of Metehan Karadeniz" width="640" height="640">
+        </figure>
+      </div>
+
+      <nav aria-label="Contents">
+        <ol class="tracklist">
+          <li><a href="#about"><span class="pos">A1</span><span class="title">About</span><span class="lead"
+                aria-hidden="true"></span><span class="note">Bilkent, Ankara</span></a></li>
+          <li><a href="#crescendo"><span class="pos">A2</span><span class="title">Crescendo</span><span class="lead"
+                aria-hidden="true"></span><span class="note">In progress</span></a></li>
+          <li><a href="#credits"><span class="pos">B1</span><span class="title">Credits</span><span class="lead"
+                aria-hidden="true"></span><span class="note">Python, Java, Flutter</span></a></li>
+          <li><a href="#contact"><span class="pos">B2</span><span class="title">Contact</span><span class="lead"
+                aria-hidden="true"></span><span class="note">Email, CV</span></a></li>
+        </ol>
       </nav>
     </div>
   </header>
 
-  <div class="hero" id="top">
+  <main id="main">
     <div class="wrap">
-      <div>
-        <div class="kicker mono">Portfolio &middot; 2026</div>
-        <h1>Metehan <em>Karadeniz</em></h1>
-        <p class="role">Computer Science student at <strong>Bilkent University</strong>, building software
-          in Java, Python and C++.</p>
+
+      <section id="about" aria-labelledby="about-h">
+        <h2 id="about-h"><span class="pos">A1</span>About</h2>
+        <div class="about-body">
+          <div>
+            <p class="lede">I'm a second-year Computer Science student at Bilkent University. Most of my code is in
+              Java and Python, and I'm learning C++ this year.</p>
+            <p class="muted">Right now I'm building Crescendo on my own: a web app and an Android app for rating
+              albums song by song. I'm also on the MCT committee of Bilkent's Management and Economics Community,
+              where I help organize the StepForward career conference.</p>
+          </div>
+          <ul class="facts-list" aria-label="At a glance">
+            <li><span>Studying</span><span>B.Sc. Computer Science</span></li>
+            <li><span>At</span><span>Bilkent University</span></li>
+            <li><span>Graduating</span><span>Expected 2029</span></li>
+            <li><span>Based in</span><span>Ankara, Türkiye</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="crescendo" aria-labelledby="crescendo-h">
+        <h2 id="crescendo-h"><span class="pos">A2</span>Crescendo</h2>
+        <div class="project-head">
+          <div>
+            <p class="tag">Python server and Flutter app, in progress</p>
+            <p>A music rating app where every song gets its own score. Search any album, rate it track by track in
+              half-stars, and Crescendo builds a "Taste DNA" profile from your ratings and shows how closely your
+              taste matches other listeners.</p>
+            <p class="muted">The web version is a single Python server on the standard library with SQLite and
+              MusicBrainz data. The Android app is written in Flutter against the same JSON API.</p>
+          </div>
+          <ul class="repo-links">
+            <li><a href="https://github.com/metehankaraden1z/crescendo-web" target="_blank" rel="noopener">
+                <span><b>Web version</b><br><span>Source on GitHub</span></span>
+                <svg class="icon" aria-hidden="true"><use href="#i-out" /></svg></a></li>
+            <li><a href="https://github.com/metehankaraden1z/crescendo-android" target="_blank" rel="noopener">
+                <span><b>Android app</b><br><span>Source on GitHub</span></span>
+                <svg class="icon" aria-hidden="true"><use href="#i-out" /></svg></a></li>
+          </ul>
+        </div>
+
+        <div class="shots">
+          <figure>
+            <a href="crescendo-home.jpg" target="_blank" rel="noopener">
+              <img src="crescendo-home.jpg" width="1440" height="900" loading="lazy"
+                alt="Crescendo main page: album search with a sample track-by-track rating card and taste match"></a>
+            <figcaption>Main page</figcaption>
+          </figure>
+          <figure>
+            <a href="crescendo-eminem-show.jpg" target="_blank" rel="noopener">
+              <img src="crescendo-eminem-show.jpg" width="1440" height="900" loading="lazy"
+                alt="Crescendo album page for The Eminem Show: community average, the user's album rating and per-track star ratings"></a>
+            <figcaption>Album page, The Eminem Show</figcaption>
+          </figure>
+          <figure>
+            <a href="crescendo-graduation-reviews.jpg" target="_blank" rel="noopener">
+              <img src="crescendo-graduation-reviews.jpg" width="1440" height="900" loading="lazy"
+                alt="Crescendo reviews for Graduation: listeners' written reviews with star ratings, and a box to write your own"></a>
+            <figcaption>Reviews, Graduation</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="credits" aria-labelledby="credits-h">
+        <h2 id="credits-h"><span class="pos">B1</span>Credits</h2>
+        <dl class="credits">
+          <div>
+            <dt>Languages</dt>
+            <dd>Python, Java <small>and C++, learning</small></dd>
+          </div>
+          <div>
+            <dt>Web</dt>
+            <dd>HTML, CSS, JavaScript</dd>
+          </div>
+          <div>
+            <dt>Mobile</dt>
+            <dd>Flutter, Dart</dd>
+          </div>
+          <div>
+            <dt>Data</dt>
+            <dd>SQLite, REST and JSON APIs</dd>
+          </div>
+          <div>
+            <dt>Tools</dt>
+            <dd>Git, GitHub</dd>
+          </div>
+          <div>
+            <dt>Speaks</dt>
+            <dd>Turkish <small>native</small>, English <small>fluent</small></dd>
+          </div>
+          <div>
+            <dt>Studies</dt>
+            <dd>Bilkent University <small>B.Sc. Computer Science, expected 2029</small></dd>
+          </div>
+          <div>
+            <dt>Club</dt>
+            <dd>Management and Economics Community <small>MCT committee, StepForward team</small></dd>
+          </div>
+        </dl>
+      </section>
+
+    </div>
+
+    <section class="contact" id="contact" aria-labelledby="contact-h">
+      <div class="wrap">
+        <h2 id="contact-h"><span class="pos">B2</span>Contact</h2>
+        <p>Email is the quickest way to reach me, for internships, projects or anything else.</p>
+        <a class="email" href="mailto:karadenizmetehan25@gmail.com">karadenizmetehan25@<wbr>gmail.com</a>
         <div class="actions">
-          <a class="btn btn-primary" href="mailto:karadenizmetehan25@gmail.com">Get in touch &rarr;</a>
-          <a class="btn" href="https://www.linkedin.com/in/metehan-karadeniz-0649ba381/" target="_blank"
-            rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
-            </svg>
-            LinkedIn
-          </a>
-          <a class="btn" href="https://github.com/metehankaraden1z" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.3 1.9 1.3 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
-            </svg>
-            GitHub
-          </a>
-          <details class="cv-menu">
-            <summary class="btn">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 3a1 1 0 0 1 1 1v9.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4l3.3 3.3V4a1 1 0 0 1 1-1zM4 19a1 1 0 0 1 1 1h14a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2 1 1 0 0 1 1-1z" />
-              </svg>
-              Download CV
-            </summary>
-            <div class="cv-options">
-              <a href="Metehan_Karadeniz_CV_EN.pdf" download><span class="cv-code">EN</span> English</a>
-              <a href="Metehan_Karadeniz_CV_TR.pdf" download lang="tr"><span class="cv-code">TR</span> Türkçe</a>
-            </div>
-          </details>
-        </div>
-      </div>
-
-      <div class="portrait">
-        <span class="block block-a" aria-hidden="true"></span>
-        <span class="block block-b" aria-hidden="true"></span>
-        <img src="headshot.jpg" alt="Portrait of Metehan Karadeniz" width="640" height="640">
-        <div class="badge" role="img" aria-label="Bilkent University, Computer Science">
-          <svg viewBox="0 0 132 132" aria-hidden="true">
-            <defs>
-              <path id="circ" d="M66,66 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0" />
-            </defs>
-            <text>
-              <textPath href="#circ">BILKENT UNIVERSITY &#8226; COMPUTER SCIENCE &#8226;</textPath>
-            </text>
-          </svg>
-          <span class="core"></span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <span>Java</span><span>Python</span><span>C++</span><span>Object-oriented design</span><span>Git &amp;
-        GitHub</span><span>Team projects</span><span>Bilkent University</span>
-      <span>Java</span><span>Python</span><span>C++</span><span>Object-oriented design</span><span>Git &amp;
-        GitHub</span><span>Team projects</span><span>Bilkent University</span>
-    </div>
-  </div>
-
-  <main class="wrap">
-
-    <section id="about" class="sec reveal">
-      <div class="sec-label"><span class="num">01</span><span class="mono">About</span></div>
-      <div>
-        <h2>Turning ideas into <em>working software.</em></h2>
-        <p class="lead">I am a Computer Science student at Bilkent University in Ankara. Most of my recent work has
-          been in Java, with Python and C++ alongside it.</p>
-        <p class="muted">I have built desktop applications as part of student development teams, from planning
-          features to splitting work and integrating everyone's code.</p>
-        <div class="facts">
-          <div class="fact"><b>3</b><span>programming languages</span></div>
-          <div class="fact"><b>2</b><span>team-built applications</span></div>
-          <div class="fact"><b>Ankara</b><span>based in Türkiye</span></div>
+          <a class="act" href="https://www.linkedin.com/in/metehan-karadeniz-0649ba381/" target="_blank"
+            rel="noopener">LinkedIn <svg class="icon" aria-hidden="true"><use href="#i-out" /></svg></a>
+          <a class="act" href="https://github.com/metehankaraden1z" target="_blank" rel="noopener">GitHub <svg
+              class="icon" aria-hidden="true"><use href="#i-out" /></svg></a>
+          <a class="act" href="Metehan_Karadeniz_CV_EN.pdf" download><svg class="icon" aria-hidden="true"><use href="#i-down" /></svg>CV, English</a>
+          <a class="act" href="Metehan_Karadeniz_CV_TR.pdf" download lang="tr" hreflang="tr"><svg class="icon"
+              aria-hidden="true"><use href="#i-down" /></svg>CV, Türkçe</a>
         </div>
       </div>
     </section>
-
-    <section id="education" class="sec reveal">
-      <div class="sec-label"><span class="num">02</span><span class="mono">Education</span></div>
-      <div>
-        <h2>Where I <em>study.</em></h2>
-        <div class="edu">
-          <div class="row">
-            <h3>Bilkent University</h3>
-            <span class="pill">Expected 2029</span>
-          </div>
-          <p class="muted" style="margin:6px 0 0;">Department of Computer Science &middot; Ankara, Türkiye</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills" class="sec reveal">
-      <div class="sec-label"><span class="num">03</span><span class="mono">Skills</span></div>
-      <div>
-        <h2>What I <em>work with.</em></h2>
-        <div class="skills">
-          <div class="skill-group" style="--c: var(--blue);">
-            <h3>Languages</h3>
-            <ul class="tags">
-              <li>Java</li>
-              <li>Python</li>
-              <li>C++</li>
-            </ul>
-          </div>
-          <div class="skill-group" style="--c: var(--pink);">
-            <h3>Practices &amp; tools</h3>
-            <ul class="tags">
-              <li>Object-oriented design</li>
-              <li>Git &amp; GitHub</li>
-              <li>Team projects</li>
-            </ul>
-          </div>
-          <div class="skill-group" style="--c: var(--blue-deep);">
-            <h3>Spoken</h3>
-            <ul class="tags">
-              <li>Turkish (native)</li>
-              <li>English</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" class="sec reveal">
-      <div class="sec-label"><span class="num">04</span><span class="mono">Projects</span></div>
-      <div>
-        <h2>Things I've <em>built.</em></h2>
-        <div class="projects">
-          <details class="card project">
-            <summary>
-              <div class="cover cover-2"><span class="big">C</span><span class="lang">PYTHON · FLUTTER</span></div>
-              <div class="body">
-                <h3>Crescendo</h3>
-                <span class="wip">Work in progress</span>
-                <p>A track-by-track music rating app: search any album, rate it song by song, and watch your taste
-                  profile build itself.</p>
-                <span class="repo">
-                  <span class="when-closed">See screenshots &amp; versions</span><span class="when-open">Hide details</span>
-                  <span class="chev" aria-hidden="true">&#8964;</span>
-                </span>
-              </div>
-            </summary>
-            <div class="shots">
-              <a class="shot shot-wide" href="crescendo-home.jpg" target="_blank" rel="noopener">
-                <img src="crescendo-home.jpg" width="1440" height="900" loading="lazy"
-                  alt="Crescendo main page: album search with a sample track-by-track rating card and taste match">
-                <span class="shot-cap">Main page</span>
-              </a>
-              <a class="shot" href="crescendo-eminem-show.jpg" target="_blank" rel="noopener">
-                <img src="crescendo-eminem-show.jpg" width="1440" height="900" loading="lazy"
-                  alt="Crescendo album page for The Eminem Show: community average, the user's album rating and per-track star ratings">
-                <span class="shot-cap">Album page &middot; The Eminem Show</span>
-              </a>
-              <a class="shot" href="crescendo-graduation-reviews.jpg" target="_blank" rel="noopener">
-                <img src="crescendo-graduation-reviews.jpg" width="1440" height="900" loading="lazy"
-                  alt="Crescendo reviews for Graduation: listeners' written reviews with star ratings, and a box to write your own">
-                <span class="shot-cap">Reviews &middot; Graduation</span>
-              </a>
-            </div>
-            <div class="versions">
-              <a class="version" href="https://github.com/metehankaraden1z/crescendo-web" target="_blank" rel="noopener">
-                <span class="v-name">Web</span>
-                <span class="v-desc">Website &amp; server · Python</span>
-                <span class="arr" aria-hidden="true">&#8599;</span>
-              </a>
-              <a class="version" href="https://github.com/metehankaraden1z/crescendo-android" target="_blank" rel="noopener">
-                <span class="v-name">Android app</span>
-                <span class="v-desc">Mobile app · Flutter</span>
-                <span class="arr" aria-hidden="true">&#8599;</span>
-              </a>
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="reveal">
-      <div class="contact-card">
-        <div class="kicker mono">05 &middot; Contact</div>
-        <h2>Let's build something <em>together.</em></h2>
-        <p>The quickest way to reach me is by email. I'm happy to talk about projects or anything else.</p>
-        <a class="email" href="mailto:karadenizmetehan25@gmail.com">karadenizmetehan25@gmail.com</a>
-        <div class="meta">
-          <a href="https://www.linkedin.com/in/metehan-karadeniz-0649ba381/" target="_blank"
-            rel="noopener">LinkedIn</a>
-          <a href="https://github.com/metehankaraden1z" target="_blank" rel="noopener">GitHub</a>
-          <span>Ankara, Türkiye</span>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <footer>
     <div class="wrap">
       <span>&copy; <span id="year">2026</span> Metehan Karadeniz</span>
-      <span>Ankara, Türkiye</span>
+      <span>Written and built in Ankara.</span>
     </div>
   </footer>
 
   <script>
-    // fade sections in as they scroll into view
-    const revealEls = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      revealEls.forEach(el => io.observe(el));
-    } else {
-      revealEls.forEach(el => el.classList.add('in'));
-    }
-
-    // light/dark toggle; the choice is remembered in this browser
+    // ink (default) / paper toggle; the choice is remembered in this browser
+    const root = document.documentElement;
     const themeBtn = document.querySelector('.theme-toggle');
-    const syncThemeButton = () => {
-      const dark = document.documentElement.dataset.theme === 'dark';
-      themeBtn.setAttribute('aria-pressed', String(dark));
-      themeBtn.title = dark ? 'Light mode' : 'Dark mode';
-    };
     themeBtn.addEventListener('click', () => {
-      const dark = document.documentElement.dataset.theme !== 'dark';
-      if (dark) {
-        document.documentElement.dataset.theme = 'dark';
-      } else {
-        delete document.documentElement.dataset.theme;
-      }
-      try {
-        localStorage.setItem('theme', dark ? 'dark' : 'light');
-      } catch (e) { }
-      syncThemeButton();
+      const dark = root.dataset.theme !== 'dark';
+      if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { }
     });
-    syncThemeButton();
-
-    // until the visitor picks a theme with the toggle, follow changes to the device setting
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-    systemDark.addEventListener('change', e => {
-      let saved = null;
-      try { saved = localStorage.getItem('theme'); } catch (err) { }
-      if (saved !== null) return;
-      if (e.matches) {
-        document.documentElement.dataset.theme = 'dark';
-      } else {
-        delete document.documentElement.dataset.theme;
-      }
-      syncThemeButton();
-    });
-
-    // mobile menu: open/close with the button, close after picking a section or pressing Escape
-    const menuBtn = document.querySelector('.menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-    const setMenu = open => {
-      navLinks.classList.toggle('open', open);
-      menuBtn.setAttribute('aria-expanded', String(open));
-      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
-    };
-    menuBtn.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
-    navLinks.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-        setMenu(false);
-        menuBtn.focus();
-      }
-    });
-
-    // CV menu: close it after a choice, on a click elsewhere, or with Escape
-    const cvMenu = document.querySelector('.cv-menu');
-    cvMenu.querySelector('.cv-options').addEventListener('click', e => {
-      if (e.target.closest('a')) cvMenu.open = false;
-    });
-    document.addEventListener('click', e => {
-      if (cvMenu.open && !cvMenu.contains(e.target)) cvMenu.open = false;
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && cvMenu.open) {
-        cvMenu.open = false;
-        cvMenu.querySelector('summary').focus();
-      }
-    });
-
-    // keep the copyright year current
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 

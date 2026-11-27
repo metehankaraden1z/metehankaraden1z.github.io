@@ -1,0 +1,3 @@
+# GitHub Pages: keep the design-system notes in the repo, but don't publish them as a page.
+exclude:
+  - DESIGN.md
