@@ -118,8 +118,13 @@ an earlier duotone treatment was dropped).
 - **Action:** a bordered, square button with a drawn SVG icon. The primary action ("Email me") is filled.
 - **Section heading:** track position in cobalt beside condensed caps, ruled underneath.
 - **Credits row:** label (secondary text) over or beside the value (semibold), with small secondary notes.
-- **Motion:** one moment only. On load the portrait is pulled through the press once, top to bottom, starting
-  with its top already printed; it is off under reduced motion. Hover transitions are 150ms ease-out.
+- **Monogram:** the MK mark (the owner's own drawing: an M with a notch in its lower right corner, and a K
+  whose top-left corner sits in it). It is the favicon on cobalt and sits in the top bar before the site name.
+- **Motion:** two moments. On the first visit of a session a cobalt intro assembles the monogram: the M comes
+  in from the left edge, the K from the right, until the K locks into the notch (about 1.1s), then the field fades
+  away (320ms). A click or key skips it; it never plays under reduced motion. Then the portrait is pulled through
+  the press once, top to bottom, starting with its top already printed; also off under reduced motion. Hover
+  transitions are 150ms ease-out.
 
 ## Do's and Don'ts
 
